@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">simple_english</string>
+    <string name="sign_in">Вход</string>
+    <string name="app_title">Simple English</string>
+    <string name="login">Логин</string>
+    <string name="login_hint">Ваш логин</string>
+    <string name="password_hint">Ваш пароль</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="sign_up">Зарегистрироваться</string>
 </resources>
