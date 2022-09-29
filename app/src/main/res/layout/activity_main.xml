@@ -88,6 +88,14 @@
             android:minHeight="48dp"
             android:textColorHint="#757575" />
 
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/log_in_button_text" />
+
     </LinearLayout>
 
     <Button
