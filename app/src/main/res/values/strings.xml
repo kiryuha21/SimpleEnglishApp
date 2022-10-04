@@ -9,4 +9,5 @@
     <string name="forgot_password">Забыли пароль?</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="log_in_button_text">Войти</string>
+    <string name="SignUpText">Регистрация</string>
 </resources>
