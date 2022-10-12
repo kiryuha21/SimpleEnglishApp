@@ -1,0 +1,5 @@
+package com.example.simple_english.data
+
+object Constants {
+    const val registrationRequestCode = 0
+}

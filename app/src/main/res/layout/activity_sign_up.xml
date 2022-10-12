@@ -37,7 +37,7 @@
             android:text="@string/reg_login_text" />
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress2"
+            android:id="@+id/userLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -54,7 +54,7 @@
             android:text="@string/reg_password_text" />
 
         <EditText
-            android:id="@+id/editTextTextPassword2"
+            android:id="@+id/userPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -99,9 +99,10 @@
             android:layout_height="20dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/sign_up_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onSignUpButtonClick"
             android:text="Зарегистрироваться" />
     </LinearLayout>
 
