@@ -13,26 +13,19 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class MainActivity : AppCompatActivity() {
-    //val db : DatabaseUsage = DatabaseUsage()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        /*db.connectToDatabase()
-        transaction {
-            for (city in DatabaseUsage.Users.selectAll()) {
-                val testdb = findViewById<TextView>(R.id.app_name);
-                testdb.text = "${city[DatabaseUsage.Users.id]}: ${city[DatabaseUsage.Users.password]}"
-            }
-        }*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        println("HERE")
         if (requestCode == Constants.registrationRequestCode) {
-            val login = data?.getStringExtra("login")
-            val password = data?.getStringExtra("password").toString()
+            println("HERE TOO")
+            val login = data?.getStringExtra(Constants.loginExtra)
+            val password = data?.getStringExtra(Constants.passwordExtra)
+            println(login + " " + password)
 
             val loginTV = findViewById<TextInputEditText>(R.id.login)
             val passwordTV = findViewById<TextInputEditText>(R.id.password)
