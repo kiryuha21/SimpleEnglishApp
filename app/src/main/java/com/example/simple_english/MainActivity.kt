@@ -4,14 +4,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
+import com.example.simple_english.data.User
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
+    var authSuccess = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,13 +41,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSignInButtonClick(view: View) {
+        var authResult = Constants.searchFailure
         lifecycleScope.launch(Dispatchers.IO) {
-            authHandling()
+            authResult = authHandling()
+        }.invokeOnCompletion {
+            if (authResult == Constants.success) {
+                val mainMenuIntent = Intent(this, MainMenu::class.java)
+                startActivity(mainMenuIntent)
+            } else {
+                val errorTV = findViewById<TextView>(R.id.wrongPassTV)
+                if (authResult == Constants.searchFailure) {
+                    errorTV.text = getText(R.string.no_such_user)
+                } else {
+                    errorTV.text = getText(R.string.wrong_password)
+                }
+                errorTV.visibility = View.VISIBLE
+            }
         }
-        val mainMenuIntent = Intent(this, MainMenu::class.java)
+
+
     }
 
-    private suspend fun authHandling() {
+    private suspend fun authHandling() : String {
         val loginTV = findViewById<TextInputEditText>(R.id.login)
         val login = loginTV.text.toString()
 
@@ -52,6 +71,14 @@ class MainActivity : AppCompatActivity() {
 
         val requests = HttpRequests()
         val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
-        println("responce = $response")
+        if (response == Constants.searchFailure) {
+            return Constants.searchFailure
+        }
+
+        val user = Json.decodeFromString<User>(response)
+        if (user.username == login && user.password == password) {
+            return Constants.success
+        }
+        return Constants.wrongPassword
     }
 }

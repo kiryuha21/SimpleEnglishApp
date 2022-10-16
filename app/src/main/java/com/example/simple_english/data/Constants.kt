@@ -10,4 +10,9 @@ object Constants {
     const val releaseURL = "https://simple-english-app.herokuapp.com"
 
     const val searchFailure = "No such user"
+    const val wrongPassword = "Wrong password"
+    const val success = "Success"
 }
+
+@kotlinx.serialization.Serializable
+data class User(val id : Int, val username : String, val password : String)
