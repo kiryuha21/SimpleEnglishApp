@@ -88,6 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:onClick="onSignInButtonClick"
             android:text="@string/log_in_button_text"
             app:cornerRadius="20dp" />
 

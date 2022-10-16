@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
+import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.google.android.material.textfield.TextInputEditText
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,12 +19,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println("HERE")
         if (requestCode == Constants.registrationRequestCode) {
-            println("HERE TOO")
             val login = data?.getStringExtra(Constants.loginExtra)
             val password = data?.getStringExtra(Constants.passwordExtra)
-            println(login + " " + password)
 
             val loginTV = findViewById<TextInputEditText>(R.id.login)
             val passwordTV = findViewById<TextInputEditText>(R.id.password)
@@ -38,5 +34,24 @@ class MainActivity : AppCompatActivity() {
     fun onSignUpButtonClick(view : View) {
         val signUpIntent = Intent(this, SignUp::class.java)
         startActivityForResult(signUpIntent, Constants.registrationRequestCode)
+    }
+
+    fun onSignInButtonClick(view: View) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            authHandling()
+        }
+        val mainMenuIntent = Intent(this, MainMenu::class.java)
+    }
+
+    private suspend fun authHandling() {
+        val loginTV = findViewById<TextInputEditText>(R.id.login)
+        val login = loginTV.text.toString()
+
+        val passwordTV = findViewById<TextInputEditText>(R.id.password)
+        val password = passwordTV.text.toString()
+
+        val requests = HttpRequests()
+        val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
+        println("responce = $response")
     }
 }

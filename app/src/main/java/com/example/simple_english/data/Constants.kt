@@ -5,4 +5,9 @@ object Constants {
 
     const val loginExtra = "login"
     const val passwordExtra = "password"
+
+    const val debugURL = "http://localhost:8081"
+    const val releaseURL = "https://simple-english-app.herokuapp.com"
+
+    const val searchFailure = "No such user"
 }
