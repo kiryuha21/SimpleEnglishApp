@@ -6,23 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
+import com.example.simple_english.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SignUp : AppCompatActivity() {
-    private lateinit var loginTV: EditText
-    private lateinit var passwordTV: EditText
-    private lateinit var passwordRepeatTV : EditText
-    private lateinit var spinner: Spinner
-    private lateinit var progressBar: ProgressBar
-    private lateinit var signUpButton: Button
+    private lateinit var binding: ActivitySignUpBinding
 
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager =
@@ -31,28 +23,22 @@ class SignUp : AppCompatActivity() {
     }
 
     private fun setLoadState(isActive : Boolean) {
-        progressBar.visibility = when (isActive) {
+        binding.signUpProgress.visibility = when (isActive) {
             true -> View.VISIBLE
             false -> View.GONE
         }
 
-        loginTV.isEnabled = !isActive
-        passwordTV.isEnabled = !isActive
-        passwordRepeatTV.isEnabled = !isActive
-        spinner.isEnabled = !isActive
-        signUpButton.isEnabled = !isActive
+        binding.userLogin.isEnabled = !isActive
+        binding.userPassword.isEnabled = !isActive
+        binding.userPasswordRepeat.isEnabled = !isActive
+        binding.spinner.isEnabled = !isActive
+        binding.signUpButton.isEnabled = !isActive
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
-
-        loginTV = findViewById(R.id.userLogin)
-        passwordTV = findViewById(R.id.userPassword)
-        passwordRepeatTV = findViewById(R.id.userPasswordRepeat)
-        progressBar = findViewById(R.id.sign_up_progress)
-        spinner = findViewById(R.id.spinner)
-        signUpButton = findViewById(R.id.sign_up_button)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     fun onSignUpButtonClick(view: View) {
@@ -66,8 +52,8 @@ class SignUp : AppCompatActivity() {
                 setLoadState(false)
 
                 if (signUpResult == Constants.success) {
-                    intent.putExtra(Constants.loginExtra, loginTV.text.toString())
-                    intent.putExtra(Constants.passwordExtra, passwordTV.text.toString())
+                    intent.putExtra(Constants.loginExtra, binding.userLogin.text.toString())
+                    intent.putExtra(Constants.passwordExtra, binding.userPassword.text.toString())
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
@@ -89,13 +75,13 @@ class SignUp : AppCompatActivity() {
     }
 
     private suspend fun signUpHandling(): String {
-        val passwordRepeatString = passwordRepeatTV.text.toString()
-        val passwordString = passwordTV.text.toString()
+        val passwordRepeatString = binding.userPasswordRepeat.text.toString()
+        val passwordString = binding.userPassword.text.toString()
         if (passwordRepeatString != passwordString) {
             return Constants.differentPasswords
         }
 
-        val usernameString = loginTV.text.toString()
+        val usernameString = binding.userLogin.text.toString()
         if (!validUsername(usernameString)) {
             return Constants.badPattern
         }

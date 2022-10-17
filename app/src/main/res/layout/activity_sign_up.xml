@@ -97,7 +97,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/sign_up_button"
+        android:id="@+id/signUpButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:onClick="onSignUpButtonClick"
@@ -129,7 +129,7 @@
         android:textColor="@android:color/holo_red_light"
         android:textSize="16sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
+        app:layout_constraintBottom_toTopOf="@+id/signUpButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

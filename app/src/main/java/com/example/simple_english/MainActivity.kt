@@ -7,24 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
-import com.google.android.material.textfield.TextInputEditText
+import com.example.simple_english.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var loginTV : TextInputEditText
-    private lateinit var passwordTV : TextInputEditText
-    private lateinit var progressBar: ProgressBar
-    private lateinit var signInButton: Button
-    private lateinit var forgotPasswordButton: Button
-    private lateinit var signUpButton: Button
+    private lateinit var binding: ActivityMainBinding
 
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager =
@@ -33,28 +26,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setLoadState(isActive : Boolean) {
-        progressBar.visibility = when (isActive) {
+        binding.signInProgress.visibility = when (isActive) {
             true -> View.VISIBLE
             false -> View.GONE
         }
 
-        loginTV.isEnabled = !isActive
-        passwordTV.isEnabled = !isActive
-        signInButton.isEnabled = !isActive
-        signUpButton.isEnabled = !isActive
-        forgotPasswordButton.isEnabled = !isActive
+        binding.login.isEnabled = !isActive
+        binding.password.isEnabled = !isActive
+        binding.signInButton.isEnabled = !isActive
+        binding.SignUpButton.isEnabled = !isActive
+        binding.forgotPasswordButton.isEnabled = !isActive
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        loginTV = findViewById(R.id.login)
-        passwordTV = findViewById(R.id.password)
-        progressBar = findViewById(R.id.sign_in_progress)
-        signInButton = findViewById(R.id.sign_in_button)
-        signUpButton = findViewById(R.id.SignUpButton)
-        forgotPasswordButton = findViewById(R.id.forgot_password_button)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -63,8 +50,8 @@ class MainActivity : AppCompatActivity() {
             val login = data?.getStringExtra(Constants.loginExtra)
             val password = data?.getStringExtra(Constants.passwordExtra)
 
-            loginTV.setText(login)
-            passwordTV.setText(password)
+            binding.login.setText(login)
+            binding.password.setText(password)
         }
     }
 
@@ -101,8 +88,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun authHandling(): String {
-        val login = loginTV.text.toString()
-        val password = passwordTV.text.toString()
+        val login = binding.login.text.toString()
+        val password = binding.password.text.toString()
 
         val requests = HttpRequests()
         val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
