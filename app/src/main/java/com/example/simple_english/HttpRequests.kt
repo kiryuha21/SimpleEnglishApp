@@ -32,8 +32,7 @@ class HttpRequests {
                 throw IOException("Unexpected code $response")
             }
 
-            val respBody = response.body!!.string()
-            result = if (respBody == "") Constants.searchFailure else respBody
+            result = response.body!!.string()
         }
 
         return result

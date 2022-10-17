@@ -11,6 +11,8 @@ object Constants {
 
     const val searchFailure = "No such user"
     const val wrongPassword = "Wrong password"
+    const val addError = "Cannot add user"
+    const val differentPasswords = "Passwords should match!"
     const val success = "Success"
 }
 
