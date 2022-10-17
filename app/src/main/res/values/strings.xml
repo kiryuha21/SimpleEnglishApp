@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">simple_english</string>
-    <string name="sign_in">Вход</string>
+    <string name="sign_in">Удобное изучение английского языка</string>
     <string name="app_title">Simple English</string>
     <string name="login">Логин</string>
     <string name="login_hint">Ваш логин</string>
@@ -9,13 +9,17 @@
     <string name="forgot_password">Забыли пароль?</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="log_in_button_text">Войти</string>
-    <string name="SignUpText">Регистрация</string>
+    <string name="sign_up_text">Регистрация</string>
     <string name="password_example">_Compl3x_</string>
     <string name="reg_login_text">Логин(e-mail)</string>
     <string name="reg_login_example">example@gmail.com</string>
     <string name="reg_password_text">Пароль</string>
     <string name="reg_password_rep_text">Повторите пароль</string>
     <string name="english_level_text">Выберите ваш уровень английского</string>
+    <string name="wrong_password">Неправильный пароль</string>
+    <string name="no_such_user">Несуществующий пользователь</string>
+    <string name="user_exists">Пользователь с таким логином уже существует!</string>
+    <string name="different_passwords">Пароли должны совпадать!</string>
     <string-array name="english_levels">
         <item>Intermediate</item>
         <item>Upper-intermediate</item>
