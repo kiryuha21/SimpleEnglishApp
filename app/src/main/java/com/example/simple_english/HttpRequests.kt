@@ -28,11 +28,10 @@ class HttpRequests {
             .build()
 
         client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) {
-                throw IOException("Unexpected code $response")
+            result = when (response.isSuccessful) {
+                true -> response.body!!.string()
+                false -> ""
             }
-
-            result = response.body!!.string()
         }
 
         return result
