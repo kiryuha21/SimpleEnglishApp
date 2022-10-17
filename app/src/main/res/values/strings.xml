@@ -18,6 +18,7 @@
     <string name="english_level_text">Выберите ваш уровень английского</string>
     <string name="wrong_password">Неправильный пароль</string>
     <string name="no_such_user">Несуществующий пользователь</string>
+    <string name="wrong_login_format">Недопустимый логин!</string>
     <string name="user_exists">Пользователь с таким логином уже существует!</string>
     <string name="different_passwords">Пароли должны совпадать!</string>
     <string-array name="english_levels">
