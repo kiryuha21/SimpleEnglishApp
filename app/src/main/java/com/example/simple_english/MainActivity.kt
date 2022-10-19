@@ -1,12 +1,9 @@
 package com.example.simple_english
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
@@ -17,12 +14,6 @@ import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    private fun Context.hideKeyboard(view: View) {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
 
     private fun setLoadState(isActive : Boolean) {
         binding.apply {
@@ -43,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setEditOnChange(binding.login)
+        setEditOnChange(binding.password)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,9 +71,9 @@ class MainActivity : AppCompatActivity() {
                     startActivity(mainMenuIntent)
                 } else {
                     if (authResult == Constants.searchFailure) {
-                        binding.login.error = getText(R.string.no_such_user)
+                        binding.loginLayout.error = getText(R.string.no_such_user)
                     } else {
-                        binding.login.error = getText(R.string.wrong_password)
+                        binding.passwordLayout.error = getText(R.string.wrong_password)
                     }
                 }
             }

@@ -30,56 +30,50 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.7">
 
-        <TextView
-            android:id="@+id/textView2"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userLoginLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_login_text" />
+            android:layout_height="match_parent"
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/userLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/reg_login_example"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/reg_login_example"
+                android:hint="@string/reg_login_text"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView4"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userPasswordLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_password_text" />
+            android:layout_height="match_parent"
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/userPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/password_example"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/password_example"
+                android:hint="@string/reg_password_text"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView6"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userPasswordRepeatLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_password_rep_text" />
+            android:layout_height="match_parent"
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/userPasswordRepeat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/password_example"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userPasswordRepeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/password_example"
+                android:hint="@string/reg_password_rep_text"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView7"

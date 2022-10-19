@@ -1,11 +1,8 @@
 package com.example.simple_english
 
-import android.app.Activity
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.databinding.ActivitySignUpBinding
@@ -14,12 +11,6 @@ import kotlinx.coroutines.launch
 
 class SignUp : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
-
-    private fun Context.hideKeyboard(view: View) {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
 
     private fun setLoadState(isActive : Boolean) {
         binding.apply {
@@ -40,6 +31,10 @@ class SignUp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setEditOnChange(binding.userLogin)
+        setEditOnChange(binding.userPassword)
+        setEditOnChange(binding.userPasswordRepeat)
     }
 
     fun onSignUpButtonClick(view: View) {
@@ -58,10 +53,14 @@ class SignUp : AppCompatActivity() {
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
-                    binding.userLogin.error = when (signUpResult) {
+                    binding.userPasswordRepeatLayout.error = when(signUpResult) {
                         Constants.differentPasswords -> getString(R.string.different_passwords)
+                        else -> null
+                    }
+                    binding.userLoginLayout.error = when(signUpResult) {
                         Constants.addError -> getString(R.string.user_exists)
-                        else -> getString(R.string.wrong_login_format)
+                        Constants.badPattern -> getString(R.string.wrong_login_format)
+                        else -> null
                     }
                 }
             }
