@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
@@ -14,6 +16,7 @@ import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var registrationLauncher : ActivityResultLauncher<Intent>? = null
 
     private fun setLoadState(isActive : Boolean) {
         binding.apply {
@@ -37,22 +40,20 @@ class MainActivity : AppCompatActivity() {
 
         setEditOnChange(binding.login)
         setEditOnChange(binding.password)
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.registrationRequestCode) {
-            val login = data?.getStringExtra(Constants.loginExtra)
-            val password = data?.getStringExtra(Constants.passwordExtra)
+        registrationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val login = it.data?.getStringExtra(Constants.loginExtra)
+                val password = it.data?.getStringExtra(Constants.passwordExtra)
 
-            binding.login.setText(login)
-            binding.password.setText(password)
+                binding.login.setText(login)
+                binding.password.setText(password)
+            }
         }
     }
 
     fun onSignUpButtonClick(view: View) {
-        val signUpIntent = Intent(this, SignUp::class.java)
-        startActivityForResult(signUpIntent, Constants.registrationRequestCode)
+        registrationLauncher?.launch(Intent(this, SignUp::class.java))
     }
 
     fun onSignInButtonClick(view: View) {
