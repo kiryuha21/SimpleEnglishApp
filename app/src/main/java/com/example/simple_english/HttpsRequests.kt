@@ -2,10 +2,9 @@ package com.example.simple_english
 
 import com.example.simple_english.data.Constants
 import okhttp3.*
-import okio.IOException
 import java.util.concurrent.TimeUnit
 
-class HttpRequests {
+class HttpsRequests {
     private val activeUrlBase = Constants.releaseURL
     private val client = OkHttpClient().newBuilder()
         .connectTimeout(30, TimeUnit.SECONDS)

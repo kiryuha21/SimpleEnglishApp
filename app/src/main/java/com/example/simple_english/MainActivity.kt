@@ -26,16 +26,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setLoadState(isActive : Boolean) {
-        binding.signInProgress.visibility = when (isActive) {
-            true -> View.VISIBLE
-            false -> View.GONE
-        }
+        binding.apply {
+            signInProgress.visibility = when (isActive) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
 
-        binding.login.isEnabled = !isActive
-        binding.password.isEnabled = !isActive
-        binding.signInButton.isEnabled = !isActive
-        binding.SignUpButton.isEnabled = !isActive
-        binding.forgotPasswordButton.isEnabled = !isActive
+            login.isEnabled = !isActive
+            password.isEnabled = !isActive
+            signInButton.isEnabled = !isActive
+            SignUpButton.isEnabled = !isActive
+            forgotPasswordButton.isEnabled = !isActive
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         val login = binding.login.text.toString()
         val password = binding.password.text.toString()
 
-        val requests = HttpRequests()
+        val requests = HttpsRequests()
         val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
         if (response.isEmpty()) {
             return Constants.searchFailure

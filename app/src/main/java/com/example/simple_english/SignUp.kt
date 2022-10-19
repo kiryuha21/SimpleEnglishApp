@@ -23,16 +23,18 @@ class SignUp : AppCompatActivity() {
     }
 
     private fun setLoadState(isActive : Boolean) {
-        binding.signUpProgress.visibility = when (isActive) {
-            true -> View.VISIBLE
-            false -> View.GONE
-        }
+        binding.apply {
+            signUpProgress.visibility = when (isActive) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
 
-        binding.userLogin.isEnabled = !isActive
-        binding.userPassword.isEnabled = !isActive
-        binding.userPasswordRepeat.isEnabled = !isActive
-        binding.spinner.isEnabled = !isActive
-        binding.signUpButton.isEnabled = !isActive
+            userLogin.isEnabled = !isActive
+            userPassword.isEnabled = !isActive
+            userPasswordRepeat.isEnabled = !isActive
+            spinner.isEnabled = !isActive
+            signUpButton.isEnabled = !isActive
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +88,7 @@ class SignUp : AppCompatActivity() {
             return Constants.badPattern
         }
 
-        val requests = HttpRequests()
+        val requests = HttpsRequests()
         val response = requests.sendAsyncPost(
             "/add",
             mapOf("username" to usernameString, "password" to passwordString)
