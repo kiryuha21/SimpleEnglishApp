@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.databinding.ActivitySignUpBinding
@@ -59,13 +58,11 @@ class SignUp : AppCompatActivity() {
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
-                    val errorTV = findViewById<TextView>(R.id.errorTV)
-                    errorTV.text = when (signUpResult) {
+                    binding.userLogin.error = when (signUpResult) {
                         Constants.differentPasswords -> getString(R.string.different_passwords)
                         Constants.addError -> getString(R.string.user_exists)
                         else -> getString(R.string.wrong_login_format)
                     }
-                    errorTV.visibility = View.VISIBLE
                 }
             }
         }

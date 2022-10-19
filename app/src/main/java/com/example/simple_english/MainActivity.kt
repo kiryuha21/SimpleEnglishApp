@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
@@ -77,13 +76,11 @@ class MainActivity : AppCompatActivity() {
                     val mainMenuIntent = Intent(this, MainMenu::class.java)
                     startActivity(mainMenuIntent)
                 } else {
-                    val errorTV = findViewById<TextView>(R.id.wrongPassTV)
                     if (authResult == Constants.searchFailure) {
-                        errorTV.text = getText(R.string.no_such_user)
+                        binding.login.error = getText(R.string.no_such_user)
                     } else {
-                        errorTV.text = getText(R.string.wrong_password)
+                        binding.login.error = getText(R.string.wrong_password)
                     }
-                    errorTV.visibility = View.VISIBLE
                 }
             }
         }
