@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
@@ -16,7 +15,16 @@ import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var registrationLauncher : ActivityResultLauncher<Intent>? = null
+
+    private var registrationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val login = it.data?.getStringExtra(Constants.loginExtra)
+            val password = it.data?.getStringExtra(Constants.passwordExtra)
+
+            binding.login.setText(login)
+            binding.password.setText(password)
+        }
+    }
 
     private fun setLoadState(isActive : Boolean) {
         binding.apply {
@@ -40,20 +48,10 @@ class MainActivity : AppCompatActivity() {
 
         setEditOnChange(binding.login)
         setEditOnChange(binding.password)
-
-        registrationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                val login = it.data?.getStringExtra(Constants.loginExtra)
-                val password = it.data?.getStringExtra(Constants.passwordExtra)
-
-                binding.login.setText(login)
-                binding.password.setText(password)
-            }
-        }
     }
 
     fun onSignUpButtonClick(view: View) {
-        registrationLauncher?.launch(Intent(this, SignUp::class.java))
+        registrationLauncher.launch(Intent(this, SignUp::class.java))
     }
 
     fun onSignInButtonClick(view: View) {
