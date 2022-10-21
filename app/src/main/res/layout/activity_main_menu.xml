@@ -6,26 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:contentDescription="@string/app_name"
-    tools:context=".MainMenu"
-    tools:openDrawer="start">
+    tools:context=".MainMenu">
+    <!--tools:openDrawer="start"-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/menu_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="main_menu"
+            android:onClick="onMenuImageClick"
+            app:srcCompat="@drawable/ic_menu" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="Some welcome text" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/main_menu_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
