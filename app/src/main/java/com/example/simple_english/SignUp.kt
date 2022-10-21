@@ -12,19 +12,17 @@ import kotlinx.coroutines.launch
 class SignUp : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
 
-    private fun setLoadState(isActive : Boolean) {
-        binding.apply {
-            signUpProgress.visibility = when (isActive) {
-                true -> View.VISIBLE
-                false -> View.GONE
-            }
-
-            userLogin.isEnabled = !isActive
-            userPassword.isEnabled = !isActive
-            userPasswordRepeat.isEnabled = !isActive
-            spinner.isEnabled = !isActive
-            signUpButton.isEnabled = !isActive
+    private fun setLoadState(isActive: Boolean) = with(binding) {
+        signUpProgress.visibility = when (isActive) {
+            true -> View.VISIBLE
+            false -> View.GONE
         }
+
+        userLogin.isEnabled = !isActive
+        userPassword.isEnabled = !isActive
+        userPasswordRepeat.isEnabled = !isActive
+        spinner.isEnabled = !isActive
+        signUpButton.isEnabled = !isActive
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +51,11 @@ class SignUp : AppCompatActivity() {
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
-                    binding.userPasswordRepeatLayout.error = when(signUpResult) {
+                    binding.userPasswordRepeatLayout.error = when (signUpResult) {
                         Constants.differentPasswords -> getString(R.string.different_passwords)
                         else -> null
                     }
-                    binding.userLoginLayout.error = when(signUpResult) {
+                    binding.userLoginLayout.error = when (signUpResult) {
                         Constants.addError -> getString(R.string.user_exists)
                         Constants.badPattern -> getString(R.string.wrong_login_format)
                         else -> null
@@ -67,7 +65,7 @@ class SignUp : AppCompatActivity() {
         }
     }
 
-    private fun validUsername(text : String): Boolean {
+    private fun validUsername(text: String): Boolean {
         val regex = Regex(".+@.+\\..+")
         return text.matches(regex)
     }

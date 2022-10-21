@@ -14,37 +14,39 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
+    private val requests = HttpsRequests()
     private lateinit var binding: ActivityMainBinding
 
-    private var registrationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) {
-            val login = it.data?.getStringExtra(Constants.loginExtra)
-            val password = it.data?.getStringExtra(Constants.passwordExtra)
+    private var registrationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val login = it.data?.getStringExtra(Constants.loginExtra)
+                val password = it.data?.getStringExtra(Constants.passwordExtra)
 
-            binding.login.setText(login)
-            binding.password.setText(password)
-        }
-    }
-
-    private fun setLoadState(isActive : Boolean) {
-        binding.apply {
-            signInProgress.visibility = when (isActive) {
-                true -> View.VISIBLE
-                false -> View.GONE
+                binding.login.setText(login)
+                binding.password.setText(password)
             }
-
-            login.isEnabled = !isActive
-            password.isEnabled = !isActive
-            signInButton.isEnabled = !isActive
-            SignUpButton.isEnabled = !isActive
-            forgotPasswordButton.isEnabled = !isActive
         }
+
+    private fun setLoadState(isActive: Boolean) = with(binding) {
+        signInProgress.visibility = when (isActive) {
+            true -> View.VISIBLE
+            false -> View.GONE
+        }
+
+        login.isEnabled = !isActive
+        password.isEnabled = !isActive
+        signInButton.isEnabled = !isActive
+        SignUpButton.isEnabled = !isActive
+        forgotPasswordButton.isEnabled = !isActive
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        requests.sendEmptyRequest()
 
         setEditOnChange(binding.login)
         setEditOnChange(binding.password)
@@ -83,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         val login = binding.login.text.toString()
         val password = binding.password.text.toString()
 
-        val requests = HttpsRequests()
         val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
         if (response.isEmpty()) {
             return Constants.searchFailure
