@@ -30,61 +30,64 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.7">
 
-        <TextView
-            android:id="@+id/textView2"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userLoginLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_login_text" />
+            android:layout_height="match_parent"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/userLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/reg_login_example"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/reg_login_example"
+                android:hint="@string/reg_login_text"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView4"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userPasswordLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_password_text" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="16sp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/userPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/password_example"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/password_example"
+                android:hint="@string/reg_password_text"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView6"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userPasswordRepeatLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reg_password_rep_text" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="16sp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:errorEnabled="true">
 
-        <EditText
-            android:id="@+id/userPasswordRepeat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/password_example"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userPasswordRepeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/password_example"
+                android:hint="@string/reg_password_rep_text"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16sp"
             android:text="@string/english_level_text" />
 
         <Spinner
@@ -97,11 +100,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/sign_up_button"
+        android:id="@+id/signUpButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="70sp"
+        android:backgroundTint="#DD2E2E"
         android:onClick="onSignUpButtonClick"
-        android:text="Зарегистрироваться"
+        android:text="@string/sign_up"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -120,18 +126,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/errorTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/user_exists"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="16sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

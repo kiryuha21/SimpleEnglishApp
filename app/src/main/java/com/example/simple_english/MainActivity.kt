@@ -1,76 +1,59 @@
 package com.example.simple_english
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
-import com.google.android.material.textfield.TextInputEditText
+import com.example.simple_english.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var loginTV : TextInputEditText
-    private lateinit var passwordTV : TextInputEditText
-    private lateinit var progressBar: ProgressBar
-    private lateinit var signInButton: Button
-    private lateinit var forgotPasswordButton: Button
-    private lateinit var signUpButton: Button
+    private val requests = HttpsRequests()
+    private lateinit var binding: ActivityMainBinding
 
-    private fun Context.hideKeyboard(view: View) {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
+    private var registrationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val login = it.data?.getStringExtra(Constants.loginExtra)
+                val password = it.data?.getStringExtra(Constants.passwordExtra)
 
-    private fun setLoadState(isActive : Boolean) {
-        progressBar.visibility = when (isActive) {
+                binding.login.setText(login)
+                binding.password.setText(password)
+            }
+        }
+
+    private fun setLoadState(isActive: Boolean) = with(binding) {
+        signInProgress.visibility = when (isActive) {
             true -> View.VISIBLE
             false -> View.GONE
         }
 
-        loginTV.isEnabled = !isActive
-        passwordTV.isEnabled = !isActive
+        login.isEnabled = !isActive
+        password.isEnabled = !isActive
         signInButton.isEnabled = !isActive
-        signUpButton.isEnabled = !isActive
+        SignUpButton.isEnabled = !isActive
         forgotPasswordButton.isEnabled = !isActive
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        loginTV = findViewById(R.id.login)
-        passwordTV = findViewById(R.id.password)
-        progressBar = findViewById(R.id.sign_in_progress)
-        signInButton = findViewById(R.id.sign_in_button)
-        signUpButton = findViewById(R.id.SignUpButton)
-        forgotPasswordButton = findViewById(R.id.forgot_password_button)
-    }
+        requests.sendEmptyRequest()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.registrationRequestCode) {
-            val login = data?.getStringExtra(Constants.loginExtra)
-            val password = data?.getStringExtra(Constants.passwordExtra)
-
-            loginTV.setText(login)
-            passwordTV.setText(password)
-        }
+        setEditOnChange(binding.login)
+        setEditOnChange(binding.password)
     }
 
     fun onSignUpButtonClick(view: View) {
-        val signUpIntent = Intent(this, SignUp::class.java)
-        startActivityForResult(signUpIntent, Constants.registrationRequestCode)
+        registrationLauncher.launch(Intent(this, SignUp::class.java))
     }
 
     fun onSignInButtonClick(view: View) {
@@ -88,23 +71,20 @@ class MainActivity : AppCompatActivity() {
                     val mainMenuIntent = Intent(this, MainMenu::class.java)
                     startActivity(mainMenuIntent)
                 } else {
-                    val errorTV = findViewById<TextView>(R.id.wrongPassTV)
                     if (authResult == Constants.searchFailure) {
-                        errorTV.text = getText(R.string.no_such_user)
+                        binding.loginLayout.error = getText(R.string.no_such_user)
                     } else {
-                        errorTV.text = getText(R.string.wrong_password)
+                        binding.passwordLayout.error = getText(R.string.wrong_password)
                     }
-                    errorTV.visibility = View.VISIBLE
                 }
             }
         }
     }
 
     private suspend fun authHandling(): String {
-        val login = loginTV.text.toString()
-        val password = passwordTV.text.toString()
+        val login = binding.login.text.toString()
+        val password = binding.password.text.toString()
 
-        val requests = HttpRequests()
         val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
         if (response.isEmpty()) {
             return Constants.searchFailure

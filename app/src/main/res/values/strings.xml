@@ -21,6 +21,7 @@
     <string name="wrong_login_format">Недопустимый логин!</string>
     <string name="user_exists">Пользователь с таким логином уже существует!</string>
     <string name="different_passwords">Пароли должны совпадать!</string>
+    <string name="uk_flag_description">UK flag</string>
     <string-array name="english_levels">
         <item>Intermediate</item>
         <item>Upper-intermediate</item>

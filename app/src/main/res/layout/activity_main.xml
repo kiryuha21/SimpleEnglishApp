@@ -45,13 +45,13 @@
         app:layout_constraintWidth_percent="0.9">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:persistentDrawingCache="animation"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp">
+            app:boxCornerRadiusTopStart="10dp"
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login"
@@ -67,8 +67,12 @@
             android:layout_height="25dp" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
@@ -87,6 +91,7 @@
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#DD2E2E"
             android:gravity="center"
             android:onClick="onSignInButtonClick"
             android:text="@string/log_in_button_text"
@@ -100,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
-        android:textColor="#AB47BC"
+        android:textColor="#9E0303"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintHorizontal_bias="0.0"
@@ -126,7 +131,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSignUpButtonClick"
         android:text="@string/sign_up"
-        android:textColor="#AB47BC"
+        android:textColor="#9E0303"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintHorizontal_bias="1.0"
@@ -138,27 +143,11 @@
         android:id="@+id/imageView"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:contentDescription="UK flag"
+        android:contentDescription="@string/uk_flag_description"
         app:layout_constraintBottom_toTopOf="@+id/app_name"
         app:layout_constraintEnd_toEndOf="@+id/app_name"
         app:layout_constraintStart_toStartOf="@+id/app_name"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/flag" />
-
-    <TextView
-        android:id="@+id/wrongPassTV"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/wrong_password"
-        android:textColor="@android:color/holo_red_light"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.138"
-        app:layout_constraintWidth_percent="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
