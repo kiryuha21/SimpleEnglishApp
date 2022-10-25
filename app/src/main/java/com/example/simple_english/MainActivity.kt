@@ -41,6 +41,11 @@ class MainActivity : AppCompatActivity() {
         forgotPasswordButton.isEnabled = !isActive
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        requests.sendEmptyRequest()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
