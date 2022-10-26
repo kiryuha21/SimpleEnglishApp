@@ -51,7 +51,8 @@
             android:persistentDrawingCache="animation"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            android:transitionName="login">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login"

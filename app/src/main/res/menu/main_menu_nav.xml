@@ -10,7 +10,6 @@
             <item android:title="third" android:id="@+id/third" android:icon="@drawable/ic_translate" />
             <item android:title="fourth" android:id="@+id/fourth" android:icon="@drawable/ic_achievements" />
             <item android:title="fifth" android:id="@+id/fifth" android:icon="@drawable/ic_stats" />
-            <item android:title="sixth" android:id="@+id/sixth" android:icon="@drawable/ic_settings" />
         </menu>
     </item>
 </menu>

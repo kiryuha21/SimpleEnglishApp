@@ -36,7 +36,8 @@
             android:layout_height="match_parent"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            android:transitionName="login">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/userLogin"
