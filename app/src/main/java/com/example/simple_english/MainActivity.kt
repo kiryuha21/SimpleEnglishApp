@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
@@ -58,7 +59,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSignUpButtonClick(view: View) {
-        registrationLauncher.launch(Intent(this, SignUp::class.java))
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, binding.loginLayout, "login")
+        registrationLauncher.launch(Intent(this, SignUp::class.java), options)
     }
 
     fun onSignInButtonClick(view: View) {
