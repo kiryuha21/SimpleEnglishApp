@@ -7,6 +7,8 @@ object Constants {
     const val debugURL = "http://localhost:8081"
     const val releaseURL = "https://simple-english-app.herokuapp.com"
 
+    // Response bodies
+    const val unknownError = "Unknown error"
     const val searchFailure = "No such user"
     const val wrongPassword = "Wrong password"
     const val addError = "Cannot add user"

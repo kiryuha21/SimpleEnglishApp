@@ -92,15 +92,19 @@ class MainActivity : AppCompatActivity() {
         val login = binding.login.text.toString()
         val password = binding.password.text.toString()
 
-        val response = requests.sendAsyncPost("/get_by_name", mapOf("username" to login))
-        if (response.isEmpty()) {
+        val response = requests.sendAsyncPost("/auth", mapOf("username" to login, "password" to password))
+        if (response == Constants.searchFailure) {
             return Constants.searchFailure
         }
 
-        val user = Json.decodeFromString<User>(response)
-        if (user.username == login && user.password == password) {
+        if (response == Constants.wrongPassword) {
+            return Constants.wrongPassword
+        }
+
+        if (response == Constants.success) {
             return Constants.success
         }
-        return Constants.wrongPassword
+
+        return Constants.unknownError
     }
 }
