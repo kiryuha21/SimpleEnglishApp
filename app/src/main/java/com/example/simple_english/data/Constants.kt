@@ -1,5 +1,8 @@
 package com.example.simple_english.data
 
+import kotlinx.serialization.Serializable
+import java.io.Serializable as Serial
+
 object Constants {
     const val loginExtra = "login"
     const val passwordExtra = "password"
@@ -17,5 +20,5 @@ object Constants {
     const val success = "Success"
 }
 
-@kotlinx.serialization.Serializable
-data class User(val id : Int, val username : String, val password : String)
+@Serializable
+data class User(val id : Int, val username : String, val password : String, val name : String) : Serial

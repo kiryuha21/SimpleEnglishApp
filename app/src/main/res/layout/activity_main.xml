@@ -48,11 +48,10 @@
             android:id="@+id/login_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:persistentDrawingCache="animation"
+            android:transitionName="login"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true"
-            android:transitionName="login">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login"

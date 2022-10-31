@@ -8,13 +8,16 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.simple_english.data.Constants
+import com.example.simple_english.data.*
 import com.example.simple_english.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class MainActivity : AppCompatActivity() {
     private val requests = HttpsRequests()
     private lateinit var binding: ActivityMainBinding
+    private lateinit var user : User
 
     private var registrationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -73,8 +76,9 @@ class MainActivity : AppCompatActivity() {
                 setLoadState(false)
 
                 if (authResult == Constants.success) {
-                    startActivity(Intent(this, MainMenu::class.java),
-                                  ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                    val menuIntent = Intent(this, MainMenu::class.java)
+                    menuIntent.putExtra("user", user)
+                    startActivity(menuIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
                     finish()
                 } else {
                     if (authResult == Constants.searchFailure) {
@@ -93,6 +97,13 @@ class MainActivity : AppCompatActivity() {
 
         val response = requests.sendAsyncPost("/auth", mapOf("username" to login, "password" to password))
         return when(response) {
+            Constants.success -> {
+                val jsonUser = requests.sendAsyncPost("/find_by_username", mapOf("username" to login))
+                println(jsonUser)
+                user = Json.decodeFromString(jsonUser)
+                println(user)
+                Constants.success
+            }
             "" -> Constants.unknownError
             else -> response
         }
