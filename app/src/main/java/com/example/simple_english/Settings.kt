@@ -54,7 +54,7 @@ class Settings : AppCompatActivity() {
             runOnUiThread {
                 setLoadState(false)
                 if (updateResult == Constants.success) {
-                    binding.settingsUserName.setText(user.name)  // The only changeable field for now
+                    binding.settingsNameTV.text = user.name  // The only changeable field for now
                     Toast.makeText(this, "Profile was successfully updated!", Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {
