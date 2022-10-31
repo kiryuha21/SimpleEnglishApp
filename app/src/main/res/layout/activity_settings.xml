@@ -104,6 +104,7 @@
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsUserLoginLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -119,6 +120,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsUserNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -134,6 +136,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsUserPasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxCornerRadiusTopEnd="10dp"
@@ -149,6 +152,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -162,7 +166,7 @@
             app:layout_constraintVertical_bias="1.0">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/settingsSupportButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/holo_red_dark"
@@ -175,17 +179,18 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/settingsSaveButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:layout_weight=".50"
                     android:backgroundTint="@android:color/holo_red_dark"
+                    android:onClick="onSaveButtonClick"
                     android:text="@string/save_changes"
                     app:cornerRadius="10dp" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/settingsExitButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
@@ -196,6 +201,17 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/updateProgress"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

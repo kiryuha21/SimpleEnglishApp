@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
+import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,9 +84,10 @@ class SignUp : AppCompatActivity() {
         }
 
         val requests = HttpsRequests()
-        val response = requests.sendAsyncPost(
+        val response = requests.sendAsyncRequest(
             "/add",
-            mapOf("username" to usernameString, "password" to passwordString)
+            mapOf("username" to usernameString, "password" to passwordString),
+            HttpMethods.POST
         )
         if (response.isEmpty()) {
             return Constants.addError

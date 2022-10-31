@@ -95,10 +95,10 @@ class MainActivity : AppCompatActivity() {
         val login = binding.login.text.toString()
         val password = binding.password.text.toString()
 
-        val response = requests.sendAsyncPost("/auth", mapOf("username" to login, "password" to password))
+        val response = requests.sendAsyncRequest("/auth", mapOf("username" to login, "password" to password), HttpMethods.POST)
         return when(response) {
             Constants.success -> {
-                val jsonUser = requests.sendAsyncPost("/find_by_username", mapOf("username" to login))
+                val jsonUser = requests.sendAsyncRequest("/find_by_username", mapOf("username" to login), HttpMethods.POST)
                 println(jsonUser)
                 user = Json.decodeFromString(jsonUser)
                 println(user)

@@ -33,6 +33,7 @@
     <string name="save_changes">Сохранить&#10;изменения</string>
     <string name="log_out">Выйти</string>
     <string name="name_text">Ваше имя</string>
+    <string name="password_required">Необходим пароль!</string>
     <string-array name="english_levels">
         <item>Intermediate</item>
         <item>Upper-intermediate</item>
