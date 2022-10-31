@@ -1,0 +1,34 @@
+<com.google.android.material.navigation.NavigationView
+    android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:id="@+id/common_navigation"
+    app:headerLayout="@layout/nav_header"
+    app:menu="@menu/main_menu_nav"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:drawablePadding="14dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="start|center_vertical"
+            android:text="@string/settings_icon_text"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_settings" />
+
+    </LinearLayout>
+</com.google.android.material.navigation.NavigationView>

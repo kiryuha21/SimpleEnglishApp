@@ -11,7 +11,7 @@ class HttpsRequests {
         .connectTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
-        .build();
+        .build()
 
     suspend fun sendAsyncPost(option: String, body: Map<String, String>): String {
         val result : String

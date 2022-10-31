@@ -1,5 +1,6 @@
 package com.example.simple_english
 
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,11 +9,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
-import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
 
 class MainActivity : AppCompatActivity() {
     private val requests = HttpsRequests()
@@ -75,8 +73,9 @@ class MainActivity : AppCompatActivity() {
                 setLoadState(false)
 
                 if (authResult == Constants.success) {
-                    val mainMenuIntent = Intent(this, MainMenu::class.java)
-                    startActivity(mainMenuIntent)
+                    startActivity(Intent(this, MainMenu::class.java),
+                                  ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                    finish()
                 } else {
                     if (authResult == Constants.searchFailure) {
                         binding.loginLayout.error = getText(R.string.no_such_user)
@@ -93,18 +92,9 @@ class MainActivity : AppCompatActivity() {
         val password = binding.password.text.toString()
 
         val response = requests.sendAsyncPost("/auth", mapOf("username" to login, "password" to password))
-        if (response == Constants.searchFailure) {
-            return Constants.searchFailure
+        return when(response) {
+            "" -> Constants.unknownError
+            else -> response
         }
-
-        if (response == Constants.wrongPassword) {
-            return Constants.wrongPassword
-        }
-
-        if (response == Constants.success) {
-            return Constants.success
-        }
-
-        return Constants.unknownError
     }
 }

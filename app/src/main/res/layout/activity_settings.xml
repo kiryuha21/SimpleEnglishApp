@@ -2,18 +2,16 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/app_name"
-    tools:context=".MainMenu">
-    <!--tools:openDrawer="start"-->
+    android:id="@+id/drawer"
+    tools:context=".Settings">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
 
         <ImageView
             android:id="@+id/menu_image"
@@ -22,15 +20,7 @@
             android:contentDescription="main_menu"
             android:onClick="onMenuImageClick"
             app:srcCompat="@drawable/ic_menu" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Some welcome text" />
     </LinearLayout>
 
-    <include layout="@layout/common_navigation" android:id="@+id/navigation" />
-
+    <include layout="@layout/common_navigation" android:id="@+id/navigation"/>
 </androidx.drawerlayout.widget.DrawerLayout>
