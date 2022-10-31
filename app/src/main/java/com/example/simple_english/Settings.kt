@@ -54,6 +54,7 @@ class Settings : AppCompatActivity() {
             runOnUiThread {
                 setLoadState(false)
                 if (updateResult == Constants.success) {
+                    binding.settingsUserName.setText(user.name)  // The only changeable field for now
                     Toast.makeText(this, "Profile was successfully updated!", Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {
@@ -77,12 +78,8 @@ class Settings : AppCompatActivity() {
             return Constants.noChanges
         }
 
-        println("changes present")
-
         val password = binding.settingsUserPassword.text ?: return Constants.passwordRequired
         val stringPassword = password.toString()
-
-        println("password correct")
 
         val authResponce = requests.sendAsyncRequest(
             "/auth",
@@ -93,12 +90,9 @@ class Settings : AppCompatActivity() {
             return authResponce
         }
 
-        println("auth passed")
-
         val jsonUser = Json.encodeToString(User(user.id, login, stringPassword, name))
 
-        println("json user - $jsonUser")
-
+        user.name = name
         return requests.sendAsyncRequest("/update", mapOf("stringUser" to jsonUser), HttpMethods.PUT)
     }
 

@@ -99,9 +99,7 @@ class MainActivity : AppCompatActivity() {
         return when(response) {
             Constants.success -> {
                 val jsonUser = requests.sendAsyncRequest("/find_by_username", mapOf("username" to login), HttpMethods.POST)
-                println(jsonUser)
                 user = Json.decodeFromString(jsonUser)
-                println(user)
                 Constants.success
             }
             "" -> Constants.unknownError
