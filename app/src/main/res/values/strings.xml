@@ -28,6 +28,7 @@
     <string name="achievements_icon_text">Достижения</string>
     <string name="statistics_icon_text">Статистика</string>
     <string name="memoring_icon_text">Запоминание</string>
+    <string name="settings_title">Настройки</string>
     <string-array name="english_levels">
         <item>Intermediate</item>
         <item>Upper-intermediate</item>

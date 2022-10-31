@@ -31,6 +31,8 @@
             android:text="Some welcome text" />
     </LinearLayout>
 
-    <include layout="@layout/common_navigation" android:id="@+id/navigation" />
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/common_navigation" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
