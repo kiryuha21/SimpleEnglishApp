@@ -33,4 +33,4 @@ enum class HttpMethods {
 }
 
 @Serializable
-data class User(val id : Int, val username : String, val password : String, var name : String? = null) : Serial
+data class User(val id : Int, var username : String, var password : String, var name : String? = null) : Serial

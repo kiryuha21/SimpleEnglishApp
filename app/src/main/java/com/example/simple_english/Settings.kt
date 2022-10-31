@@ -54,7 +54,8 @@ class Settings : AppCompatActivity() {
             runOnUiThread {
                 setLoadState(false)
                 if (updateResult == Constants.success) {
-                    binding.settingsNameTV.text = user.name  // The only changeable field for now
+                    binding.settingsNameTV.text = user.name
+                    binding.settingsLoginTV.text = user.username
                     Toast.makeText(this, "Profile was successfully updated!", Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {
@@ -83,7 +84,7 @@ class Settings : AppCompatActivity() {
 
         val authResponce = requests.sendAsyncRequest(
             "/auth",
-            mapOf("username" to login, "password" to stringPassword),
+            mapOf("username" to user.username, "password" to stringPassword),
             HttpMethods.POST
         )
         if (authResponce != Constants.success) {
@@ -93,7 +94,8 @@ class Settings : AppCompatActivity() {
         val jsonUser = Json.encodeToString(User(user.id, login, stringPassword, name))
 
         user.name = name
-        return requests.sendAsyncRequest("/update", mapOf("stringUser" to jsonUser), HttpMethods.PUT)
+        user.username = login
+        return requests.sendAsyncRequest("/update", mapOf("id" to user.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
     }
 
     private fun setLoadState(isActive: Boolean) = with(binding) {
