@@ -8,22 +8,26 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.example.simple_english.data.User
-import com.example.simple_english.databinding.ActivityMainMenuBinding
-import java.time.Duration
+import com.example.simple_english.databinding.ActivitySettingsBinding
 
-class MainMenu : AppCompatActivity() {
-    lateinit var binding : ActivityMainMenuBinding
-
+class Settings : AppCompatActivity() {
+    private lateinit var binding : ActivitySettingsBinding
     private lateinit var user : User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainMenuBinding.inflate(layoutInflater)
+        binding =  ActivitySettingsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setNavigationActions()
 
         user = intent.getSerializableExtra("user") as User
+
+        binding.settingsLoginTV.text = user.username
+        binding.settingsNameTV.text = user.name
+
+        binding.settingsUserLogin.setText(user.username)
+        binding.settingsUserName.setText(user.name)
     }
 
     fun onMenuImageClick(view : View) {
@@ -33,16 +37,17 @@ class MainMenu : AppCompatActivity() {
     private fun setNavigationActions() = with(binding) {
         navigation.commonNavigation.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.education -> Toast.makeText(this@MainMenu, "already here", Toast.LENGTH_SHORT).show()
-                else -> Toast.makeText(this@MainMenu, "something pressed", Toast.LENGTH_SHORT).show()
+                R.id.education -> {
+                    startActivity(
+                        Intent(this@Settings, MainMenu::class.java),
+                        ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
+                }
+                else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true
         }
-
         navigation.settingsButton.setOnClickListener {
-            val settingsIntent = Intent(this@MainMenu, Settings::class.java)
-            settingsIntent.putExtra("user", user)
-            startActivity(settingsIntent, ActivityOptions.makeSceneTransitionAnimation(this@MainMenu).toBundle())
+            Toast.makeText(this@Settings, "already here", Toast.LENGTH_SHORT).show()
         }
     }
 }

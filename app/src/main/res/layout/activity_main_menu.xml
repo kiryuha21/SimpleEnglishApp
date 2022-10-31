@@ -31,34 +31,8 @@
             android:text="Some welcome text" />
     </LinearLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/main_menu_navigation"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/main_menu_nav" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="50dp"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/settings_button"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:drawablePadding="14dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="start|center_vertical"
-                android:text="sixth"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:drawableStartCompat="@drawable/ic_settings" />
-        </LinearLayout>
-    </com.google.android.material.navigation.NavigationView>
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/common_navigation" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
