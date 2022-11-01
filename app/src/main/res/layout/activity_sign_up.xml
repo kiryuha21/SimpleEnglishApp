@@ -55,7 +55,8 @@
             android:layout_marginTop="16sp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/userPassword"
@@ -73,7 +74,8 @@
             android:layout_marginTop="16sp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/userPasswordRepeat"

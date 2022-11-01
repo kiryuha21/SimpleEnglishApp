@@ -66,6 +66,7 @@ class Settings : AppCompatActivity() {
                 if (updateResult == Constants.success) {
                     binding.settingsNameTV.text = user.name
                     binding.settingsLoginTV.text = user.username
+                    binding.settingsUserPassword.setText("")
                     Toast.makeText(this, getText(R.string.successful_update), Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {

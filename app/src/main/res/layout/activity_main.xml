@@ -72,7 +72,8 @@
             android:layout_height="match_parent"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
