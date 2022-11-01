@@ -74,24 +74,13 @@ class Settings : AppCompatActivity() {
     private suspend fun saveChangesHandling(): String {
         val login = binding.settingsUserLogin.text.toString()
         val name = binding.settingsUserName.text.toString()
+        val password = binding.settingsUserPassword.text.toString()
 
-        if (user.name == name && user.username == login) {
+        if (user.name == name && user.username == login && password.isEmpty()) {
             return Constants.noChanges
         }
 
-        val password = binding.settingsUserPassword.text ?: return Constants.passwordRequired
-        val stringPassword = password.toString()
-
-        val authResponce = requests.sendAsyncRequest(
-            "/auth",
-            mapOf("username" to user.username, "password" to stringPassword),
-            HttpMethods.POST
-        )
-        if (authResponce != Constants.success) {
-            return authResponce
-        }
-
-        val jsonUser = Json.encodeToString(User(user.id, login, stringPassword, name))
+        val jsonUser = Json.encodeToString(User(user.id, login, password, name))
 
         user.name = name
         user.username = login
