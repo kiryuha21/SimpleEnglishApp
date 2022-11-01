@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityMainMenuBinding
-import java.time.Duration
 
 class MainMenu : AppCompatActivity() {
     lateinit var binding : ActivityMainMenuBinding
@@ -42,6 +41,7 @@ class MainMenu : AppCompatActivity() {
         navigation.settingsButton.setOnClickListener {
             val settingsIntent = Intent(this@MainMenu, Settings::class.java)
             settingsIntent.putExtra("user", user)
+            drawer.closeDrawer(GravityCompat.START)
             startActivity(settingsIntent, ActivityOptions.makeSceneTransitionAnimation(this@MainMenu).toBundle())
         }
     }

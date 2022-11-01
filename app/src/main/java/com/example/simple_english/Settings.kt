@@ -137,6 +137,7 @@ class Settings : AppCompatActivity() {
                 R.id.education -> {
                     val educationIntent = Intent(this@Settings, MainMenu::class.java)
                     educationIntent.putExtra("user", user)
+                    drawer.closeDrawer(GravityCompat.START)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
                 }
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()

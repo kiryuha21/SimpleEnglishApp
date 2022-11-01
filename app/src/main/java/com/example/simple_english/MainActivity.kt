@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.*
 import com.example.simple_english.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
+import androidx.core.util.Pair as UtilPair
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -60,7 +61,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSignUpButtonClick(view: View) {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, binding.loginLayout, "login")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+            UtilPair.create(binding.loginLayout, "login"),
+            UtilPair.create(binding.passwordLayout, "password"))
         registrationLauncher.launch(Intent(this, SignUp::class.java), options)
     }
 
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     val menuIntent = Intent(this, MainMenu::class.java)
                     menuIntent.putExtra("user", user)
                     startActivity(menuIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-                    finish()
+                    supportFinishAfterTransition()
                 } else {
                     if (authResult == Constants.searchFailure) {
                         binding.loginLayout.error = getText(R.string.no_such_user)
