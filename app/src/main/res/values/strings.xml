@@ -36,6 +36,7 @@
     <string name="password_required">Необходим пароль!</string>
     <string name="successful_update">Настройки успешно обнолены</string>
     <string name="new_password_hint">Новый пароль</string>
+    <string name="back_button_double_press">Нажмите еще раз для выхода</string>
     <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznecp@yandex.ru</string>
 
     <string-array name="english_levels">
