@@ -1,6 +1,7 @@
 package com.example.simple_english
 
 import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,12 +23,21 @@ class Settings : AppCompatActivity() {
     private lateinit var user : User
     private val requests = HttpsRequests()
 
+    private lateinit var developersAlert : AlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =  ActivitySettingsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setNavigationActions()
+
+        developersAlert = AlertDialog.Builder(this)
+            .setTitle(getText(R.string.contact_developers))
+            .setMessage(getText(R.string.developers_desc))
+            .setCancelable(true)
+            .setPositiveButton(android.R.string.ok) { dialogInterface, _ -> dialogInterface.dismiss() }
+            .create()
 
         setEditOnChange(binding.settingsUserLogin)
         setEditOnChange(binding.settingsUserPassword)
@@ -56,7 +66,7 @@ class Settings : AppCompatActivity() {
                 if (updateResult == Constants.success) {
                     binding.settingsNameTV.text = user.name
                     binding.settingsLoginTV.text = user.username
-                    Toast.makeText(this, "Profile was successfully updated!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getText(R.string.successful_update), Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {
                         when (updateResult) {
@@ -106,8 +116,18 @@ class Settings : AppCompatActivity() {
         requests.sendEmptyRequest()
     }
 
-    fun onMenuImageClick(view : View) {
+    fun onMenuImageClick(view: View) {
         binding.drawer.openDrawer(GravityCompat.START)
+    }
+
+    fun onExitButtonClick(view: View) {
+        val mainIntent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(mainIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        finishAffinity()
+    }
+
+    fun onSupportButtonClick(view: View) {
+        developersAlert.show()
     }
 
     private fun setNavigationActions() = with(binding) {
