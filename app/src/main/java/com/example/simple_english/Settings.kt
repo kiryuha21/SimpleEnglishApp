@@ -134,7 +134,7 @@ class Settings : AppCompatActivity() {
     fun onExitButtonClick(view: View) {
         val mainIntent = Intent(applicationContext, MainActivity::class.java)
         startActivity(mainIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-        finishAffinity()
+        supportFinishAfterTransition()
     }
 
     fun onSupportButtonClick(view: View) {
@@ -147,7 +147,9 @@ class Settings : AppCompatActivity() {
                 R.id.education -> {
                     val educationIntent = Intent(this@Settings, MainMenu::class.java)
                     drawer.closeDrawer(GravityCompat.START)
+                    educationIntent.putExtra("user", user)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
+                    supportFinishAfterTransition()
                 }
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }

@@ -17,6 +17,8 @@
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +32,8 @@
                 android:layout_height="48dp"
                 android:contentDescription="main_menu"
                 android:onClick="onMenuImageClick"
-                app:srcCompat="@drawable/ic_menu" />
+                app:srcCompat="@drawable/ic_menu"
+                app:tint="#637D95" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -38,9 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingEnd="48dp"
+                android:paddingEnd="35dp"
                 android:text="@string/settings_title"
-                android:textSize="24sp" />
+                android:textSize="34sp" />
 
         </LinearLayout>
 
@@ -72,7 +75,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="name surname"
+                android:text="Гость"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="16sp" />
 

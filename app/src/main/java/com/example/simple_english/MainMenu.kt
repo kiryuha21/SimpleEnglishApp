@@ -10,14 +10,8 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityMainMenuBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 class MainMenu : AppCompatActivity() {
     lateinit var binding : ActivityMainMenuBinding
@@ -71,19 +65,6 @@ class MainMenu : AppCompatActivity() {
 
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        lifecycleScope.launch(Dispatchers.IO) {
-            val jsonUser = HttpsRequests().sendAsyncRequest("/find_by_id", mapOf("id" to user.id.toString()), HttpMethods.POST)
-            user = Json.decodeFromString(jsonUser)
-        }.invokeOnCompletion {
-            runOnUiThread {
-                setNavHeaderText()
-                binding.mainMenuWelcomeText.text = String.format(getText(R.string.welcome_text).toString(), user.name ?: "Гость")
-            }
-        }
-    }
-
     fun onMenuImageClick(view : View) {
         binding.drawer.openDrawer(GravityCompat.START)
     }
@@ -102,6 +83,7 @@ class MainMenu : AppCompatActivity() {
             settingsIntent.putExtra("user", user)
             drawer.closeDrawer(GravityCompat.START)
             startActivity(settingsIntent, ActivityOptions.makeSceneTransitionAnimation(this@MainMenu).toBundle())
+            supportFinishAfterTransition()
         }
     }
 }

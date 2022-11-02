@@ -43,7 +43,7 @@
     <string name="audio">Аудирование</string>
     <string name="welcome_text">Готовы погрузиться в мир английского, %1$s?</string>
     <string name="back_button_double_press">Нажмите еще раз для выхода</string>
-    <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznecp@yandex.ru</string>
+    <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznetsovie@student.bmstu.ru</string>
 
     <string-array name="english_levels">
         <item>Intermediate</item>
