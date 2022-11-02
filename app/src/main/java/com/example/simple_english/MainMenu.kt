@@ -10,8 +10,14 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityMainMenuBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class MainMenu : AppCompatActivity() {
     lateinit var binding : ActivityMainMenuBinding
@@ -27,7 +33,7 @@ class MainMenu : AppCompatActivity() {
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, getText(R.string.back_button_double_press), Toast.LENGTH_SHORT).show()
 
-        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+        Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +69,19 @@ class MainMenu : AppCompatActivity() {
 
     fun onAudioCardClicked(view: View) {
 
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val jsonUser = HttpsRequests().sendAsyncRequest("/find_by_id", mapOf("id" to user.id.toString()), HttpMethods.POST)
+            user = Json.decodeFromString(jsonUser)
+        }.invokeOnCompletion {
+            runOnUiThread {
+                setNavHeaderText()
+                binding.mainMenuWelcomeText.text = String.format(getText(R.string.welcome_text).toString(), user.name ?: "Гость")
+            }
+        }
     }
 
     fun onMenuImageClick(view : View) {

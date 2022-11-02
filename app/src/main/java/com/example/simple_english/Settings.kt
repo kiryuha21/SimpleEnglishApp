@@ -76,6 +76,7 @@ class Settings : AppCompatActivity() {
                     binding.settingsNameTV.text = user.name
                     binding.settingsLoginTV.text = user.username
                     binding.settingsUserPassword.setText("")
+                    setNavHeaderText()
                     Toast.makeText(this, getText(R.string.successful_update), Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {
@@ -145,7 +146,6 @@ class Settings : AppCompatActivity() {
             when(it.itemId) {
                 R.id.education -> {
                     val educationIntent = Intent(this@Settings, MainMenu::class.java)
-                    educationIntent.putExtra("user", user)
                     drawer.closeDrawer(GravityCompat.START)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
                 }

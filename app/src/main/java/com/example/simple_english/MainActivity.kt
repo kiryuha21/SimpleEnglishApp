@@ -24,6 +24,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var user : User
     private var doubleBackToExitPressedOnce = false
 
+    private var registrationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val login = it.data?.getStringExtra(Constants.loginExtra)
+                val password = it.data?.getStringExtra(Constants.passwordExtra)
+
+                binding.login.setText(login)
+                binding.password.setText(password)
+            }
+        }
+
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
@@ -35,17 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
-
-    private var registrationLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                val login = it.data?.getStringExtra(Constants.loginExtra)
-                val password = it.data?.getStringExtra(Constants.passwordExtra)
-
-                binding.login.setText(login)
-                binding.password.setText(password)
-            }
-        }
 
     private fun setLoadState(isActive: Boolean) = with(binding) {
         signInProgress.visibility = when (isActive) {
