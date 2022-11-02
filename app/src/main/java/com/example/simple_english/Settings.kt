@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
@@ -52,6 +53,14 @@ class Settings : AppCompatActivity() {
 
         binding.settingsUserLogin.setText(user.username)
         binding.settingsUserName.setText(user.name)
+
+        setNavHeaderText()
+    }
+
+    private fun setNavHeaderText() {
+        val navHeader = binding.navigation.commonNavigation.getHeaderView(0)
+        val userGreetTV = navHeader.findViewById<TextView>(R.id.nav_header_greeting)
+        userGreetTV.text = String.format(getText(R.string.nav_header_greeting).toString(), user.name ?: "Гость")
     }
 
     fun onSaveButtonClick(view : View) {

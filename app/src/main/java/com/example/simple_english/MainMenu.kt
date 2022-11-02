@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.example.simple_english.data.User
@@ -37,6 +38,31 @@ class MainMenu : AppCompatActivity() {
         setNavigationActions()
 
         user = intent.getSerializableExtra("user") as User
+
+        binding.mainMenuWelcomeText.text = String.format(getText(R.string.welcome_text).toString(), user.name ?: "Гость")
+        setNavHeaderText()
+    }
+
+    private fun setNavHeaderText() {
+        val navHeader = binding.navigation.commonNavigation.getHeaderView(0)
+        val userGreetTV = navHeader.findViewById<TextView>(R.id.nav_header_greeting)
+        userGreetTV.text = String.format(getText(R.string.nav_header_greeting).toString(), user.name ?: "Гость")
+    }
+
+    fun onTheoryCardClicked(view: View) {
+        
+    }
+
+    fun onInsertWordsCardsClicked(view: View) {
+
+    }
+
+    fun onReadingCardClicked(view: View) {
+
+    }
+
+    fun onAudioCardClicked(view: View) {
+
     }
 
     fun onMenuImageClick(view : View) {

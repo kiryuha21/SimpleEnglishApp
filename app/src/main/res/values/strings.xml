@@ -36,7 +36,12 @@
     <string name="password_required">Необходим пароль!</string>
     <string name="successful_update">Настройки успешно обнолены</string>
     <string name="new_password_hint">Новый пароль</string>
-    <string name="welcome_text">Готовы погрузиться в мир английского, $user?</string>
+    <string name="nav_header_greeting">Привет, %1$s</string>
+    <string name="theory">Теория</string>
+    <string name="insert_words">Вставьте слова</string>
+    <string name="reading">Чтение</string>
+    <string name="audio">Аудирование</string>
+    <string name="welcome_text">Готовы погрузиться в мир английского, %1$s?</string>
     <string name="back_button_double_press">Нажмите еще раз для выхода</string>
     <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznecp@yandex.ru</string>
 
