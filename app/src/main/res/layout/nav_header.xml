@@ -30,12 +30,12 @@
             app:srcCompat="@drawable/default_avatar" />
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="100dp"
+            android:id="@+id/nav_header_greeting"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Hello, user!"
+            android:gravity="start"
+            android:text="Hello, $user"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="@+id/imageView2"

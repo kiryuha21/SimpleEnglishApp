@@ -1,10 +1,12 @@
 package com.example.simple_english
 
 import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
@@ -22,12 +24,21 @@ class Settings : AppCompatActivity() {
     private lateinit var user : User
     private val requests = HttpsRequests()
 
+    private lateinit var developersAlert : AlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =  ActivitySettingsBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setNavigationActions()
+
+        developersAlert = AlertDialog.Builder(this)
+            .setTitle(getText(R.string.contact_developers))
+            .setMessage(getText(R.string.developers_desc))
+            .setCancelable(true)
+            .setPositiveButton(android.R.string.ok) { dialogInterface, _ -> dialogInterface.dismiss() }
+            .create()
 
         setEditOnChange(binding.settingsUserLogin)
         setEditOnChange(binding.settingsUserPassword)
@@ -42,6 +53,14 @@ class Settings : AppCompatActivity() {
 
         binding.settingsUserLogin.setText(user.username)
         binding.settingsUserName.setText(user.name)
+
+        setNavHeaderText()
+    }
+
+    private fun setNavHeaderText() {
+        val navHeader = binding.navigation.commonNavigation.getHeaderView(0)
+        val userGreetTV = navHeader.findViewById<TextView>(R.id.nav_header_greeting)
+        userGreetTV.text = String.format(getText(R.string.nav_header_greeting).toString(), user.name ?: "Гость")
     }
 
     fun onSaveButtonClick(view : View) {
@@ -54,8 +73,11 @@ class Settings : AppCompatActivity() {
             runOnUiThread {
                 setLoadState(false)
                 if (updateResult == Constants.success) {
-                    binding.settingsUserName.setText(user.name)  // The only changeable field for now
-                    Toast.makeText(this, "Profile was successfully updated!", Toast.LENGTH_SHORT).show()
+                    binding.settingsNameTV.text = user.name
+                    binding.settingsLoginTV.text = user.username
+                    binding.settingsUserPassword.setText("")
+                    setNavHeaderText()
+                    Toast.makeText(this, getText(R.string.successful_update), Toast.LENGTH_SHORT).show()
                 } else {
                     binding.apply {
                         when (updateResult) {
@@ -73,27 +95,17 @@ class Settings : AppCompatActivity() {
     private suspend fun saveChangesHandling(): String {
         val login = binding.settingsUserLogin.text.toString()
         val name = binding.settingsUserName.text.toString()
+        val password = binding.settingsUserPassword.text.toString()
 
-        if (user.name == name && user.username == login) {
+        if (user.name == name && user.username == login && password.isEmpty()) {
             return Constants.noChanges
         }
 
-        val password = binding.settingsUserPassword.text ?: return Constants.passwordRequired
-        val stringPassword = password.toString()
-
-        val authResponce = requests.sendAsyncRequest(
-            "/auth",
-            mapOf("username" to login, "password" to stringPassword),
-            HttpMethods.POST
-        )
-        if (authResponce != Constants.success) {
-            return authResponce
-        }
-
-        val jsonUser = Json.encodeToString(User(user.id, login, stringPassword, name))
+        val jsonUser = Json.encodeToString(User(user.id, login, password, name))
 
         user.name = name
-        return requests.sendAsyncRequest("/update", mapOf("stringUser" to jsonUser), HttpMethods.PUT)
+        user.username = login
+        return requests.sendAsyncRequest("/update", mapOf("id" to user.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
     }
 
     private fun setLoadState(isActive: Boolean) = with(binding) {
@@ -115,8 +127,18 @@ class Settings : AppCompatActivity() {
         requests.sendEmptyRequest()
     }
 
-    fun onMenuImageClick(view : View) {
+    fun onMenuImageClick(view: View) {
         binding.drawer.openDrawer(GravityCompat.START)
+    }
+
+    fun onExitButtonClick(view: View) {
+        val mainIntent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(mainIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        finishAffinity()
+    }
+
+    fun onSupportButtonClick(view: View) {
+        developersAlert.show()
     }
 
     private fun setNavigationActions() = with(binding) {
@@ -124,7 +146,7 @@ class Settings : AppCompatActivity() {
             when(it.itemId) {
                 R.id.education -> {
                     val educationIntent = Intent(this@Settings, MainMenu::class.java)
-                    educationIntent.putExtra("user", user)
+                    drawer.closeDrawer(GravityCompat.START)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
                 }
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()

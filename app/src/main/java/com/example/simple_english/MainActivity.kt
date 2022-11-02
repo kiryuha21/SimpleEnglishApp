@@ -4,13 +4,17 @@ import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.*
 import com.example.simple_english.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
+import androidx.core.util.Pair as UtilPair
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -18,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val requests = HttpsRequests()
     private lateinit var binding: ActivityMainBinding
     private lateinit var user : User
+    private var doubleBackToExitPressedOnce = false
 
     private var registrationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -29,6 +34,18 @@ class MainActivity : AppCompatActivity() {
                 binding.password.setText(password)
             }
         }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getText(R.string.back_button_double_press), Toast.LENGTH_SHORT).show()
+
+        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+    }
 
     private fun setLoadState(isActive: Boolean) = with(binding) {
         signInProgress.visibility = when (isActive) {
@@ -60,7 +77,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSignUpButtonClick(view: View) {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, binding.loginLayout, "login")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+            UtilPair.create(binding.loginLayout, "login"),
+            UtilPair.create(binding.passwordLayout, "password"))
         registrationLauncher.launch(Intent(this, SignUp::class.java), options)
     }
 
@@ -79,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                     val menuIntent = Intent(this, MainMenu::class.java)
                     menuIntent.putExtra("user", user)
                     startActivity(menuIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-                    finish()
+                    supportFinishAfterTransition()
                 } else {
                     if (authResult == Constants.searchFailure) {
                         binding.loginLayout.error = getText(R.string.no_such_user)

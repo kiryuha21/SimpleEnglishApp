@@ -5,6 +5,7 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/menu_background"
     tools:context=".Settings">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,7 +117,8 @@
                     android:id="@+id/settingsUserLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/reg_login_text" />
+                    android:hint="@string/reg_login_text"
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -141,13 +143,15 @@
                 android:layout_height="wrap_content"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/settingsUserPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password_hint" />
+                    android:hint="@string/new_password_hint"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -170,6 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/holo_red_dark"
+                android:onClick="onSupportButtonClick"
                 android:text="@string/contact_developers"
                 app:cornerRadius="10dp" />
 
@@ -196,6 +201,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight=".50"
                     android:backgroundTint="@android:color/holo_red_dark"
+                    android:onClick="onExitButtonClick"
                     android:text="@string/log_out"
                     app:cornerRadius="10dp" />
 
@@ -218,4 +224,5 @@
     <include
         android:id="@+id/navigation"
         layout="@layout/common_navigation" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

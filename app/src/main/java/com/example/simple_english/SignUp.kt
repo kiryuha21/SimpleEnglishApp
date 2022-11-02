@@ -50,7 +50,7 @@ class SignUp : AppCompatActivity() {
                     intent.putExtra(Constants.loginExtra, binding.userLogin.text.toString())
                     intent.putExtra(Constants.passwordExtra, binding.userPassword.text.toString())
                     setResult(RESULT_OK, intent)
-                    finishAfterTransition()
+                    supportFinishAfterTransition()
                 } else {
                     binding.userPasswordRepeatLayout.error = when (signUpResult) {
                         Constants.differentPasswords -> getString(R.string.different_passwords)
