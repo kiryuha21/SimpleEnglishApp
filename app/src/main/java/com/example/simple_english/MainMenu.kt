@@ -53,8 +53,8 @@ class MainMenu : AppCompatActivity() {
     private fun learningActivityStart(learningType: String) {
         val learningIntent = Intent(this, Learning::class.java)
         learningIntent.putExtra("learning_type", learningType)
+        learningIntent.putExtra("user", user)
         startActivity(learningIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-        supportFinishAfterTransition()
     }
 
     fun onTheoryCardClicked(view: View) {
@@ -80,7 +80,7 @@ class MainMenu : AppCompatActivity() {
     private fun setNavigationActions() = with(binding) {
         navigation.commonNavigation.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.education -> Toast.makeText(this@MainMenu, "already here", Toast.LENGTH_SHORT).show()
+                R.id.education -> Toast.makeText(this@MainMenu, getText(R.string.already_here), Toast.LENGTH_SHORT).show()
                 else -> Toast.makeText(this@MainMenu, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true

@@ -158,7 +158,7 @@ class Settings : AppCompatActivity() {
             true
         }
         navigation.settingsButton.setOnClickListener {
-            Toast.makeText(this@Settings, "already here", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Settings, getText(R.string.already_here), Toast.LENGTH_SHORT).show()
         }
     }
 }

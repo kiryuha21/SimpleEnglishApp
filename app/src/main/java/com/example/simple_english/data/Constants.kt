@@ -26,10 +26,10 @@ object Constants {
     const val passwordRequired = "Password required for profile changes"
 
     // Education forms
-    const val reading = "Reading"
-    const val theory = "Theory"
-    const val insertWords = "Insert Words"
-    const val audio = "Audio"
+    const val reading = "Чтение"
+    const val theory = "Теория"
+    const val insertWords = "Вставьте слова"
+    const val audio = "Аудирование"
 }
 
 enum class HttpMethods {
