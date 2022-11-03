@@ -107,7 +107,7 @@ class Settings : AppCompatActivity() {
 
         user.name = name
         user.username = login
-        return requests.sendAsyncRequest("/update", mapOf("id" to user.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
+        return requests.sendAsyncRequest("/update_user", mapOf("id" to user.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
     }
 
     private fun setLoadState(isActive: Boolean) = with(binding) {

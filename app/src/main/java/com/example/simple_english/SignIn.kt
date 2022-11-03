@@ -118,9 +118,9 @@ class SignIn : AppCompatActivity() {
         val password = binding.password.text.toString()
 
         val postBody = mapOf("username" to login, "password" to password)
-        return when(val response = requests.sendAsyncRequest("/auth", postBody, HttpMethods.POST)) {
+        return when(val response = requests.sendAsyncRequest("/auth_user", postBody, HttpMethods.POST)) {
             Constants.success -> {
-                val jsonUser = requests.sendAsyncRequest("/find_by_username", mapOf("username" to login), HttpMethods.POST)
+                val jsonUser = requests.sendAsyncRequest("/find_user_by_username", mapOf("username" to login), HttpMethods.POST)
                 user = Json.decodeFromString(jsonUser)
                 Constants.success
             }

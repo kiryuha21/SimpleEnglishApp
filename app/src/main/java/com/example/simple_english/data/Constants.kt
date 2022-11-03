@@ -39,4 +39,10 @@ enum class HttpMethods {
 }
 
 @Serializable
-data class User(val id : Int, var username : String, var password : String, var name : String? = null) : Serial
+data class User(val id: Int, var username : String, var password : String, var name : String? = null) : Serial
+
+@Serializable
+data class TaskContent(val id: Int, val taskText: String)
+
+@Serializable
+data class TaskHeader(val id: Int, val taskType: String, val pointsXP: Int, val description: String, val content: TaskContent)

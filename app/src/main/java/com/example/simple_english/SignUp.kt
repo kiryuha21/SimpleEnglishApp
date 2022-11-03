@@ -88,7 +88,7 @@ class SignUp : AppCompatActivity() {
 
         val requests = HttpsRequests()
         val response = requests.sendAsyncRequest(
-            "/add",
+            "/add_user",
             mapOf("username" to usernameString, "password" to passwordString),
             HttpMethods.POST
         )

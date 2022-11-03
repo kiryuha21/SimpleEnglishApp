@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.FragmentManager
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityLearningBinding
@@ -29,12 +28,7 @@ class Learning : AppCompatActivity() {
 
         supportFragmentManager.
             beginTransaction().
-            replace(R.id.fragmentContainer, when(learningType) {
-                Constants.reading -> Reading()
-                Constants.theory -> Theory()
-                Constants.audio -> Audio()
-                else -> InsertWords()
-            })
+            replace(R.id.fragmentContainer, ChooseTask())
             .commit()
 
         setNavigationActions()
