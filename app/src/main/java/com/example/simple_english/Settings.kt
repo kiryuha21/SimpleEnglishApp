@@ -14,6 +14,8 @@ import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivitySettingsBinding
+import com.example.simple_english.lib.HttpsRequests
+import com.example.simple_english.lib.setEditOnChange
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
@@ -132,7 +134,7 @@ class Settings : AppCompatActivity() {
     }
 
     fun onExitButtonClick(view: View) {
-        val mainIntent = Intent(applicationContext, MainActivity::class.java)
+        val mainIntent = Intent(applicationContext, SignIn::class.java)
         startActivity(mainIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         supportFinishAfterTransition()
     }

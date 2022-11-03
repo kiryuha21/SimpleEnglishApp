@@ -1,4 +1,4 @@
-package com.example.simple_english
+package com.example.simple_english.lib
 
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods

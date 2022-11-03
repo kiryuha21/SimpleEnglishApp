@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
+import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityMainMenuBinding
 
@@ -49,20 +50,27 @@ class MainMenu : AppCompatActivity() {
         userGreetTV.text = String.format(getText(R.string.nav_header_greeting).toString(), user.name ?: "Гость")
     }
 
+    private fun learningActivityStart(learningType: String) {
+        val learningIntent = Intent(this, Learning::class.java)
+        learningIntent.putExtra("learning_type", learningType)
+        startActivity(learningIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        supportFinishAfterTransition()
+    }
+
     fun onTheoryCardClicked(view: View) {
-        
+        learningActivityStart(Constants.theory)
     }
 
     fun onInsertWordsCardsClicked(view: View) {
-
+        learningActivityStart(Constants.insertWords)
     }
 
     fun onReadingCardClicked(view: View) {
-
+        learningActivityStart(Constants.reading)
     }
 
     fun onAudioCardClicked(view: View) {
-
+        learningActivityStart(Constants.audio)
     }
 
     fun onMenuImageClick(view : View) {

@@ -13,12 +13,15 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.*
 import com.example.simple_english.databinding.ActivityMainBinding
+import com.example.simple_english.lib.HttpsRequests
+import com.example.simple_english.lib.hideKeyboard
+import com.example.simple_english.lib.setEditOnChange
 import kotlinx.coroutines.*
 import androidx.core.util.Pair as UtilPair
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-class MainActivity : AppCompatActivity() {
+class SignIn : AppCompatActivity() {
     private val requests = HttpsRequests()
     private lateinit var binding: ActivityMainBinding
     private lateinit var user : User
@@ -114,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         val login = binding.login.text.toString()
         val password = binding.password.text.toString()
 
-        val response = requests.sendAsyncRequest("/auth", mapOf("username" to login, "password" to password), HttpMethods.POST)
-        return when(response) {
+        val postBody = mapOf("username" to login, "password" to password)
+        return when(val response = requests.sendAsyncRequest("/auth", postBody, HttpMethods.POST)) {
             Constants.success -> {
                 val jsonUser = requests.sendAsyncRequest("/find_by_username", mapOf("username" to login), HttpMethods.POST)
                 user = Json.decodeFromString(jsonUser)

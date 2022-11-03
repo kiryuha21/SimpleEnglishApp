@@ -24,6 +24,12 @@ object Constants {
     // Settings editing constants
     const val noChanges = "Nothing changed"
     const val passwordRequired = "Password required for profile changes"
+
+    // Education forms
+    const val reading = "Reading"
+    const val theory = "Theory"
+    const val insertWords = "Insert Words"
+    const val audio = "Audio"
 }
 
 enum class HttpMethods {

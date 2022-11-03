@@ -1,4 +1,4 @@
-package com.example.simple_english
+package com.example.simple_english.lib
 
 import android.app.Activity
 import android.content.Context
