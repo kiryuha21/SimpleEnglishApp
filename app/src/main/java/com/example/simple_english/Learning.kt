@@ -8,8 +8,11 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.data.User
@@ -39,15 +42,49 @@ class Learning : AppCompatActivity() {
         setNavigationActions()
         setNavHeaderText()
 
-        binding.fragmentLoadingProgress.visibility = View.VISIBLE
+        setTasks(learningType)
+    }
 
+    private fun taskClickHandling(learningType: String) {
+        println("so here")
+        val fragment = supportFragmentManager.findFragmentByTag("chooseTask")!!
+        println("here")
+        val recycle = fragment.requireView().findViewById<RecyclerView>(R.id.optionsRecycle)
+        val count = recycle.adapter!!.itemCount
+        println(count)
+        for (i in 0 until count) {
+            val holder = recycle.findViewHolderForAdapterPosition(i)
+            if (holder != null) {
+                val card = holder.itemView.findViewById<CardView>(R.id.taskCard)
+                card.setOnClickListener {
+                    card.transitionName = "cardHeading"
+
+                    supportFragmentManager
+                        .beginTransaction()
+                        .addSharedElement(card, "cardHeading")
+                        .replace(R.id.fragmentContainer, when(learningType) {
+                            Constants.audio -> Audio()
+                            Constants.theory -> Theory()
+                            Constants.insertWords -> InsertWords()
+                            else -> Reading()
+                        })
+                        .commit()
+                }
+            }
+        }
+    }
+
+    private fun setTasks(learningType: String) {
+        binding.fragmentLoadingProgress.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
             taskModel.tasks.postValue(Json.decodeFromString<ArrayList<TaskHeader>>(loadFromDB(learningType)))
         }.invokeOnCompletion {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, ChooseTask())
+                .replace(R.id.fragmentContainer, ChooseTask(), "ChooseTask")
                 .commit()
+
+            taskClickHandling(learningType)
 
             runOnUiThread {
                 binding.fragmentLoadingProgress.visibility = View.GONE
