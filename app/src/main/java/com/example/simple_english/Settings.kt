@@ -14,6 +14,8 @@ import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivitySettingsBinding
+import com.example.simple_english.lib.HttpsRequests
+import com.example.simple_english.lib.setEditOnChange
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
@@ -105,7 +107,7 @@ class Settings : AppCompatActivity() {
 
         user.name = name
         user.username = login
-        return requests.sendAsyncRequest("/update", mapOf("id" to user.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
+        return requests.sendAsyncRequest("/update_user", mapOf("id" to user.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
     }
 
     private fun setLoadState(isActive: Boolean) = with(binding) {
@@ -132,9 +134,9 @@ class Settings : AppCompatActivity() {
     }
 
     fun onExitButtonClick(view: View) {
-        val mainIntent = Intent(applicationContext, MainActivity::class.java)
+        val mainIntent = Intent(applicationContext, SignIn::class.java)
         startActivity(mainIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-        finishAffinity()
+        supportFinishAfterTransition()
     }
 
     fun onSupportButtonClick(view: View) {
@@ -147,14 +149,16 @@ class Settings : AppCompatActivity() {
                 R.id.education -> {
                     val educationIntent = Intent(this@Settings, MainMenu::class.java)
                     drawer.closeDrawer(GravityCompat.START)
+                    educationIntent.putExtra("user", user)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
+                    supportFinishAfterTransition()
                 }
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true
         }
         navigation.settingsButton.setOnClickListener {
-            Toast.makeText(this@Settings, "already here", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Settings, getText(R.string.already_here), Toast.LENGTH_SHORT).show()
         }
     }
 }

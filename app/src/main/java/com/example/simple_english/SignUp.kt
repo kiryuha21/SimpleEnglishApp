@@ -7,6 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.ActivitySignUpBinding
+import com.example.simple_english.lib.HttpsRequests
+import com.example.simple_english.lib.hideKeyboard
+import com.example.simple_english.lib.setEditOnChange
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -85,7 +88,7 @@ class SignUp : AppCompatActivity() {
 
         val requests = HttpsRequests()
         val response = requests.sendAsyncRequest(
-            "/add",
+            "/add_user",
             mapOf("username" to usernameString, "password" to passwordString),
             HttpMethods.POST
         )

@@ -10,14 +10,9 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.simple_english.data.HttpMethods
+import com.example.simple_english.data.Constants
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityMainMenuBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 class MainMenu : AppCompatActivity() {
     lateinit var binding : ActivityMainMenuBinding
@@ -55,33 +50,27 @@ class MainMenu : AppCompatActivity() {
         userGreetTV.text = String.format(getText(R.string.nav_header_greeting).toString(), user.name ?: "Гость")
     }
 
+    private fun learningActivityStart(learningType: String) {
+        val learningIntent = Intent(this, Learning::class.java)
+        learningIntent.putExtra("learning_type", learningType)
+        learningIntent.putExtra("user", user)
+        startActivity(learningIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+    }
+
     fun onTheoryCardClicked(view: View) {
-        
+        learningActivityStart(Constants.theory)
     }
 
     fun onInsertWordsCardsClicked(view: View) {
-
+        learningActivityStart(Constants.insertWords)
     }
 
     fun onReadingCardClicked(view: View) {
-
+        learningActivityStart(Constants.reading)
     }
 
     fun onAudioCardClicked(view: View) {
-
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        lifecycleScope.launch(Dispatchers.IO) {
-            val jsonUser = HttpsRequests().sendAsyncRequest("/find_by_id", mapOf("id" to user.id.toString()), HttpMethods.POST)
-            user = Json.decodeFromString(jsonUser)
-        }.invokeOnCompletion {
-            runOnUiThread {
-                setNavHeaderText()
-                binding.mainMenuWelcomeText.text = String.format(getText(R.string.welcome_text).toString(), user.name ?: "Гость")
-            }
-        }
+        learningActivityStart(Constants.audio)
     }
 
     fun onMenuImageClick(view : View) {
@@ -91,7 +80,7 @@ class MainMenu : AppCompatActivity() {
     private fun setNavigationActions() = with(binding) {
         navigation.commonNavigation.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.education -> Toast.makeText(this@MainMenu, "already here", Toast.LENGTH_SHORT).show()
+                R.id.education -> Toast.makeText(this@MainMenu, getText(R.string.already_here), Toast.LENGTH_SHORT).show()
                 else -> Toast.makeText(this@MainMenu, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true
@@ -102,6 +91,7 @@ class MainMenu : AppCompatActivity() {
             settingsIntent.putExtra("user", user)
             drawer.closeDrawer(GravityCompat.START)
             startActivity(settingsIntent, ActivityOptions.makeSceneTransitionAnimation(this@MainMenu).toBundle())
+            supportFinishAfterTransition()
         }
     }
 }
