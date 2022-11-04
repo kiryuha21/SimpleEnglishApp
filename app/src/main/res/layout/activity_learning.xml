@@ -51,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-            tools:layout="@layout/fragment_reading" />
+            tools:layout="@layout/fragment_choose_task" />
 
         <ProgressBar
             android:id="@+id/fragmentLoadingProgress"

@@ -11,7 +11,7 @@ import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.databinding.TaskItemBinding
 
 class TaskAdapter(): RecyclerView.Adapter<TaskAdapter.TaskHolder>() {
-    val tasks = ArrayList<TaskHeader>()
+    var tasks = ArrayList<TaskHeader>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
         val view = LayoutInflater.from(parent.context).inflate(layout.task_item, parent, false)
