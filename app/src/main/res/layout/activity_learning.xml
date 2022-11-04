@@ -5,6 +5,7 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/menu_background"
     tools:context=".Learning">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +27,7 @@
                 android:id="@+id/menu_image"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
                 android:contentDescription="main_menu"
                 android:onClick="onMenuImageClick"
                 app:srcCompat="@drawable/ic_menu"
@@ -37,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="24sp" />
+                android:textSize="34sp" />
         </FrameLayout>
 
         <androidx.fragment.app.FragmentContainerView
