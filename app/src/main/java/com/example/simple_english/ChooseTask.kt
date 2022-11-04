@@ -1,6 +1,7 @@
 package com.example.simple_english
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +9,41 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.simple_english.data.Constants
 import com.example.simple_english.databinding.FragmentChooseTaskBinding
 import com.example.simple_english.lib.TaskAdapter
 import com.example.simple_english.lib.TaskModel
 
 class ChooseTask : Fragment() {
     private lateinit var fragBinding: FragmentChooseTaskBinding
-    private val adapter = TaskAdapter()
     private val taskModel: TaskModel by activityViewModels()
+    private val adapter = TaskAdapter {
+        val recycle = fragBinding.optionsRecycle
+        taskModel.currentTask.value = taskModel.tasks.value!![recycle.getChildAdapterPosition(it.parent as View)]
+        it.transitionName = "cardHeading"
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .addSharedElement(it, "cardHeading")
+            .replace(
+                R.id.fragmentContainer, when (taskModel.tasksType.value!!) {
+                    Constants.audio -> Audio()
+                    Constants.theory -> Theory()
+                    Constants.insertWords -> InsertWords()
+                    else -> Reading()
+                }
+            )
+            .addToBackStack(null)
+            .commit()
+        it.transitionName = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.fragments_transition)
+        sharedElementReturnTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.fragments_transition)
     }
 
     override fun onCreateView(
