@@ -8,9 +8,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import com.example.simple_english.data.Constants
+import androidx.lifecycle.lifecycleScope
+import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityLearningBinding
+import com.example.simple_english.lib.HttpsRequests
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Learning : AppCompatActivity() {
     private lateinit var binding: ActivityLearningBinding
@@ -26,13 +30,33 @@ class Learning : AppCompatActivity() {
         learningType = intent.getStringExtra("learning_type")!!
         binding.learningTypeTV.text = learningType
 
-        supportFragmentManager.
-            beginTransaction().
-            replace(R.id.fragmentContainer, ChooseTask())
-            .commit()
-
         setNavigationActions()
         setNavHeaderText()
+
+        binding.fragmentLoadingProgress.visibility = View.VISIBLE
+
+        var tasksJson = ""
+        lifecycleScope.launch(Dispatchers.IO) {
+            tasksJson = loadFromDB(learningType)
+        }.invokeOnCompletion {
+            val chooseTaskBundle = Bundle()
+            chooseTaskBundle.putString("tasks", tasksJson)
+            val chooseTask = ChooseTask()
+            chooseTask.arguments = chooseTaskBundle
+
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, chooseTask)
+                .commit()
+
+            runOnUiThread {
+                binding.fragmentLoadingProgress.visibility = View.GONE
+            }
+        }
+    }
+
+    private suspend fun loadFromDB(type: String): String {
+        return HttpsRequests().sendAsyncRequest("/find_task_headers_by_type", mapOf("type" to type), HttpMethods.POST)
     }
 
     private fun setNavHeaderText() {
