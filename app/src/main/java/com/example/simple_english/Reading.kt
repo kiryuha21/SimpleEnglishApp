@@ -65,18 +65,19 @@ class Reading : Fragment() {
         return fragBinding.root
     }
 
-    private fun fillCard() {
-        fragBinding.readingHeaderImage.setImageResource(when(taskModel.tasksType.value) {
+    private fun fillCard() = with(fragBinding.readingInclude) {
+        readingHeaderImage.setImageResource(when(taskModel.tasksType.value) {
             Constants.audio -> R.drawable.music_disk
             Constants.theory -> R.drawable.study_hat
             Constants.insertWords -> R.drawable.task_list
             else -> R.drawable.book
         })
 
-        fragBinding.readingHeaderPoints.text = "${taskModel.currentTask.value!!.pointsXP} XP"
-        fragBinding.readingHeaderDescription.text = taskModel.currentTask.value!!.description
+        readingHeaderPoints.text = "${taskModel.currentTask.value!!.pointsXP} XP"
+        readingHeaderDescription.text = taskModel.currentTask.value!!.description
+        readingHeaderCard.transitionName = taskModel.transitionName.value
+
         fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
-        fragBinding.readingHeaderCard.transitionName = taskModel.transitionName.value
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -37,6 +37,10 @@ object Constants {
     // Adapter
     const val doneTask = -1
     const val doneColor = "#D3D3D3"
+
+    // Insert Words
+    const val correctAnswer = "<font color=green>%s</font>"
+    const val wrongAnswer = "<font color=red>%s</font>"
 }
 
 enum class HttpMethods {
@@ -55,7 +59,9 @@ data class User(val id: Int,
 
 @Serializable
 data class TaskContent(val id: Int,
-                       val taskText: String)
+                       val taskText: String,
+                       val taskVariants: Array<Array<String>>,
+                       val correctVariants: Array<String>)
 
 @Serializable
 data class TaskHeader(val id: Int,

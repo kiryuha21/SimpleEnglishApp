@@ -4,84 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     android:background="@color/menu_background"
     tools:context=".Reading">
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/textContentCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        app:cardUseCompatPadding="true"
+        app:contentPaddingLeft="5dp"
+        app:contentPaddingRight="5dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/textContentCard"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textContent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="60dp"
-            app:cardUseCompatPadding="true"
-            app:contentPaddingLeft="5dp"
-            app:contentPaddingRight="5dp">
+            android:text="TextView" />
+    </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/textContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="TextView" />
-        </androidx.cardview.widget.CardView>
+    <include
+        android:id="@+id/reading_include"
+        layout="@layout/common_card_for_fragments" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/reading_header_card"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:transitionName="@string/taskHeaderTransitionName"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true"
-            app:contentPaddingLeft="5dp"
-            app:contentPaddingRight="5dp">
+    <Button
+        android:id="@+id/reading_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:backgroundTint="@android:color/darker_gray"
+        android:text="@string/back" />
 
-            <ImageView
-                android:id="@+id/reading_header_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/book" />
-
-            <TextView
-                android:id="@+id/reading_header_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="TextView"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/reading_header_points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:text="TextView"
-                android:textColor="@android:color/holo_green_light"
-                android:textSize="20sp" />
-
-        </androidx.cardview.widget.CardView>
-
-        <Button
-            android:id="@+id/reading_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:backgroundTint="@android:color/darker_gray"
-            android:text="@string/back" />
-
-        <Button
-            android:id="@+id/reading_done_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:backgroundTint="@android:color/holo_green_light"
-            android:text="@string/done" />
-    </FrameLayout>
+    <Button
+        android:id="@+id/reading_done_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:backgroundTint="@android:color/holo_green_light"
+        android:text="@string/done" />
 
     <ProgressBar
         android:id="@+id/taskLoadingProgress"
