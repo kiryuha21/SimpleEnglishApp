@@ -62,6 +62,13 @@ class ChooseTask : Fragment() {
         }
 
         taskModel.tasks.observe(activity as LifecycleOwner) {
+            for (i in it.indices) {
+                for (j in taskModel.user.value!!.completedTasks) {
+                    if (it[i].id == j) {
+                        it[i].pointsXP = Constants.doneTask
+                    }
+                }
+            }
             adapter.tasks = it
         }
         fragBinding.optionsRecycle.adapter = adapter

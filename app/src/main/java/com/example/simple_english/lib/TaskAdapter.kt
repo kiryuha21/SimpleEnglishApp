@@ -1,5 +1,6 @@
 package com.example.simple_english.lib
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,8 +38,16 @@ class TaskAdapter(private val clickListener: (View) -> Unit): RecyclerView.Adapt
                 else -> drawable.book
             })
             taskNameTV.text = task.description
-            pointsTV.text = "${task.pointsXP} XP"
-            taskCard.setOnClickListener(clickListener)
+            when (task.pointsXP) {
+                Constants.doneTask -> {
+                    pointsTV.text = "Выполнено"
+                    taskCard.setCardBackgroundColor(Color.parseColor(Constants.doneColor))
+                }
+                else  -> {
+                    pointsTV.text = "${task.pointsXP} XP"
+                    taskCard.setOnClickListener(clickListener)
+                }
+            }
             taskCard.transitionName = String.format(Constants.taskHeaderTransitionName, position)
         }
     }

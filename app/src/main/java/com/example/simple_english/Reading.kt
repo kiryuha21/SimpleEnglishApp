@@ -8,9 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
+import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.FragmentReadingBinding
+import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class Reading : Fragment() {
     private lateinit var fragBinding: FragmentReadingBinding
@@ -32,6 +39,33 @@ class Reading : Fragment() {
     ): View {
         fragBinding = FragmentReadingBinding.inflate(inflater)
 
+        fillCard()
+
+        fragBinding.readingBackButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        fragBinding.readingDoneButton.setOnClickListener {
+            taskModel.user.value!!.XP += taskModel.currentTask.value!!.pointsXP
+            taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
+            taskModel.user.value!!.password = ""
+            val jsonUser = Json.encodeToString(taskModel.user.value!!)
+            println("password is " + taskModel.user.value!!.password)
+            val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
+            lifecycleScope.launch(Dispatchers.IO) {
+                HttpsRequests().sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
+            }.invokeOnCompletion {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, ChooseTask())
+                    .commit()
+            }
+        }
+
+        return fragBinding.root
+    }
+
+    private fun fillCard() {
         fragBinding.readingHeaderImage.setImageResource(when(taskModel.tasksType.value) {
             Constants.audio -> R.drawable.music_disk
             Constants.theory -> R.drawable.study_hat
@@ -43,8 +77,6 @@ class Reading : Fragment() {
         fragBinding.readingHeaderDescription.text = taskModel.currentTask.value!!.description
         fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
         fragBinding.readingHeaderCard.transitionName = taskModel.transitionName.value
-
-        return fragBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

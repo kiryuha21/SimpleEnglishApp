@@ -33,6 +33,10 @@ object Constants {
 
     // Transition names
     const val taskHeaderTransitionName = "taskHeader%d"
+
+    // Adapter
+    const val doneTask = -1
+    const val doneColor = "#D3D3D3"
 }
 
 enum class HttpMethods {
@@ -42,10 +46,20 @@ enum class HttpMethods {
 }
 
 @Serializable
-data class User(val id: Int, var username : String, var password : String, var name : String? = null) : Serial
+data class User(val id: Int,
+                var username : String,
+                var password : String,
+                var XP : Int,
+                var completedTasks : IntArray,
+                var name : String? = null) : Serial
 
 @Serializable
-data class TaskContent(val id: Int, val taskText: String)
+data class TaskContent(val id: Int,
+                       val taskText: String)
 
 @Serializable
-data class TaskHeader(val id: Int, val taskType: String, val pointsXP: Int, val description: String, val content: TaskContent)
+data class TaskHeader(val id: Int,
+                      val taskType: String,
+                      var pointsXP: Int,
+                      val description: String,
+                      val content: TaskContent)

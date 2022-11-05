@@ -66,26 +66,21 @@
 
         </androidx.cardview.widget.CardView>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <Button
+            android:id="@+id/reading_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:backgroundTint="@android:color/darker_gray"
+            android:text="@string/back" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|start"
-                android:backgroundTint="@android:color/darker_gray"
-                android:text="@string/back" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:backgroundTint="@android:color/holo_green_light"
-                android:text="@string/done" />
-        </FrameLayout>
+        <Button
+            android:id="@+id/reading_done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:text="@string/done" />
     </FrameLayout>
 
 </FrameLayout>

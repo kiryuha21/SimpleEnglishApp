@@ -33,6 +33,7 @@ class Learning : AppCompatActivity() {
         setContentView(binding.root)
 
         user = intent.getSerializableExtra("user") as User
+        taskModel.user.value = user
         learningType = intent.getStringExtra("learning_type")!!
         binding.learningTypeTV.text = learningType
 
