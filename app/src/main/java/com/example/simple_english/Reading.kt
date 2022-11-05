@@ -1,27 +1,35 @@
 package com.example.simple_english
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.simple_english.data.Constants
+import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.FragmentReadingBinding
+import com.example.simple_english.lib.HttpsRequests
+import com.example.simple_english.lib.TaskModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Reading.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Reading : Fragment() {
     private lateinit var fragBinding: FragmentReadingBinding
+    private val taskModel: TaskModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.fragments_transition)
+        sharedElementReturnTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.fragments_transition)
     }
 
     override fun onCreateView(
@@ -30,19 +38,56 @@ class Reading : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         fragBinding = FragmentReadingBinding.inflate(inflater)
+
+        fillCard()
+
+        fragBinding.readingBackButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        fragBinding.readingDoneButton.setOnClickListener {
+            taskModel.user.value!!.XP += taskModel.currentTask.value!!.pointsXP
+            taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
+            taskModel.user.value!!.password = ""
+            fragBinding.taskLoadingProgress.visibility = View.VISIBLE
+            val jsonUser = Json.encodeToString(taskModel.user.value!!)
+            val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
+            lifecycleScope.launch(Dispatchers.IO) {
+                HttpsRequests().sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
+            }.invokeOnCompletion {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, ChooseTask())
+                    .commit()
+            }
+        }
+
         return fragBinding.root
     }
 
+    private fun fillCard() {
+        fragBinding.readingHeaderImage.setImageResource(when(taskModel.tasksType.value) {
+            Constants.audio -> R.drawable.music_disk
+            Constants.theory -> R.drawable.study_hat
+            Constants.insertWords -> R.drawable.task_list
+            else -> R.drawable.book
+        })
+
+        fragBinding.readingHeaderPoints.text = "${taskModel.currentTask.value!!.pointsXP} XP"
+        fragBinding.readingHeaderDescription.text = taskModel.currentTask.value!!.description
+        fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
+        fragBinding.readingHeaderCard.transitionName = taskModel.transitionName.value
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Reading.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance() = Reading()
     }

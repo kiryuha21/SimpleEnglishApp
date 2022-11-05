@@ -7,19 +7,25 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.HttpMethods
+import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.ActivityLearningBinding
 import com.example.simple_english.lib.HttpsRequests
+import com.example.simple_english.lib.TaskModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class Learning : AppCompatActivity() {
     private lateinit var binding: ActivityLearningBinding
     private lateinit var user: User
     private lateinit var learningType: String
+    private val taskModel: TaskModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,26 +33,25 @@ class Learning : AppCompatActivity() {
         setContentView(binding.root)
 
         user = intent.getSerializableExtra("user") as User
+        taskModel.user.value = user
         learningType = intent.getStringExtra("learning_type")!!
         binding.learningTypeTV.text = learningType
 
         setNavigationActions()
         setNavHeaderText()
 
+        taskModel.tasksType.value = learningType
+        setTasks(learningType)
+    }
+
+    private fun setTasks(learningType: String) {
         binding.fragmentLoadingProgress.visibility = View.VISIBLE
-
-        var tasksJson = ""
         lifecycleScope.launch(Dispatchers.IO) {
-            tasksJson = loadFromDB(learningType)
+            taskModel.tasks.postValue(Json.decodeFromString<ArrayList<TaskHeader>>(loadFromDB(learningType)))
         }.invokeOnCompletion {
-            val chooseTaskBundle = Bundle()
-            chooseTaskBundle.putString("tasks", tasksJson)
-            val chooseTask = ChooseTask()
-            chooseTask.arguments = chooseTaskBundle
-
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, chooseTask)
+                .replace(R.id.fragmentContainer, ChooseTask())
                 .commit()
 
             runOnUiThread {
