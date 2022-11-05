@@ -49,8 +49,8 @@ class Reading : Fragment() {
             taskModel.user.value!!.XP += taskModel.currentTask.value!!.pointsXP
             taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
             taskModel.user.value!!.password = ""
+            fragBinding.taskLoadingProgress.visibility = View.VISIBLE
             val jsonUser = Json.encodeToString(taskModel.user.value!!)
-            println("password is " + taskModel.user.value!!.password)
             val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
             lifecycleScope.launch(Dispatchers.IO) {
                 HttpsRequests().sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
