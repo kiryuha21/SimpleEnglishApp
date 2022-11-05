@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +20,11 @@ class ChooseTask : Fragment() {
     private val taskModel: TaskModel by activityViewModels()
     private val adapter = TaskAdapter {
         val recycle = fragBinding.optionsRecycle
-        taskModel.currentTask.value = taskModel.tasks.value!![recycle.getChildAdapterPosition(it.parent as View)]
-        it.transitionName = "cardHeading"
+        taskModel.currentTask.value = taskModel.tasks.value!![recycle.getChildAdapterPosition(it)]
+        it.transitionName = getText(R.string.taskHeaderTransitionName).toString()
         requireActivity().supportFragmentManager
             .beginTransaction()
-            .addSharedElement(it, "cardHeading")
+            .addToBackStack(null)
             .replace(
                 R.id.fragmentContainer, when (taskModel.tasksType.value!!) {
                     Constants.audio -> Audio()
@@ -32,9 +33,8 @@ class ChooseTask : Fragment() {
                     else -> Reading()
                 }
             )
-            .addToBackStack(null)
+            .addSharedElement(it as CardView, "cardHeading")
             .commit()
-        it.transitionName = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

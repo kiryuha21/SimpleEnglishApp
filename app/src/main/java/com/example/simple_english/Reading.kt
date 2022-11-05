@@ -18,6 +18,7 @@ class Reading : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        postponeEnterTransition()
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.fragments_transition)
         sharedElementReturnTransition = TransitionInflater.from(requireContext())
@@ -43,6 +44,11 @@ class Reading : Fragment() {
         fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
 
         return fragBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        startPostponedEnterTransition()
     }
 
     companion object {
