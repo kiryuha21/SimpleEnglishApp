@@ -19,7 +19,7 @@ class TaskAdapter(private val clickListener: (View) -> Unit): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: TaskHolder, position: Int) {
-        holder.bind(tasks[position], clickListener)
+        holder.bind(tasks[position], position, clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -29,7 +29,7 @@ class TaskAdapter(private val clickListener: (View) -> Unit): RecyclerView.Adapt
     class TaskHolder(item: View): RecyclerView.ViewHolder(item) {
         private val binding = TaskItemBinding.bind(item)
 
-        fun bind(task: TaskHeader, clickListener: (View) -> Unit) = with(binding) {
+        fun bind(task: TaskHeader, position: Int, clickListener: (View) -> Unit) = with(binding) {
             studyType.setImageResource(when(task.taskType) {
                 Constants.audio -> drawable.music_disk
                 Constants.theory -> drawable.study_hat
@@ -39,6 +39,7 @@ class TaskAdapter(private val clickListener: (View) -> Unit): RecyclerView.Adapt
             taskNameTV.text = task.description
             pointsTV.text = "${task.pointsXP} XP"
             taskCard.setOnClickListener(clickListener)
+            taskCard.transitionName = String.format(Constants.taskHeaderTransitionName, position)
         }
     }
 }

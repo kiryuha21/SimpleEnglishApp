@@ -7,16 +7,33 @@
     android:background="@color/menu_background"
     tools:context=".Reading">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:orientation="vertical">
+        android:layout_margin="8dp">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/textContentCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            app:cardUseCompatPadding="true"
+            app:contentPaddingLeft="5dp"
+            app:contentPaddingRight="5dp">
+
+            <TextView
+                android:id="@+id/textContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="TextView" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/reading_header_card"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:transitionName="@string/taskHeaderTransitionName"
             app:cardCornerRadius="10dp"
             app:cardUseCompatPadding="true"
@@ -27,7 +44,8 @@
                 android:id="@+id/reading_header_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:srcCompat="@drawable/ic_calendar" />
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/book" />
 
             <TextView
                 android:id="@+id/reading_header_description"
@@ -46,22 +64,6 @@
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="20sp" />
 
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/textContentCard"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            app:cardUseCompatPadding="true"
-            app:contentPaddingLeft="5dp"
-            app:contentPaddingRight="5dp">
-
-            <TextView
-                android:id="@+id/textContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="TextView" />
         </androidx.cardview.widget.CardView>
 
         <FrameLayout
@@ -84,6 +86,6 @@
                 android:backgroundTint="@android:color/holo_green_light"
                 android:text="@string/done" />
         </FrameLayout>
-    </LinearLayout>
+    </FrameLayout>
 
 </FrameLayout>

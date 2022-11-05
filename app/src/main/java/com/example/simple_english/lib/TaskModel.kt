@@ -9,11 +9,15 @@ open class TaskModel: ViewModel() {
         MutableLiveData<ArrayList<TaskHeader>>()
     }
 
+    val currentTask: MutableLiveData<TaskHeader> by lazy {
+        MutableLiveData<TaskHeader>()
+    }
+
     val tasksType: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    val currentTask: MutableLiveData<TaskHeader> by lazy {
-        MutableLiveData<TaskHeader>()
+    val transitionName: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
     }
 }

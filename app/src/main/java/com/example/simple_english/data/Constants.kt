@@ -30,6 +30,9 @@ object Constants {
     const val theory = "Теория"
     const val insertWords = "Вставьте слова"
     const val audio = "Аудирование"
+
+    // Transition names
+    const val taskHeaderTransitionName = "taskHeader%d"
 }
 
 enum class HttpMethods {

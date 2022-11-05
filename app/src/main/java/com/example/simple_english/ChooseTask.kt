@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +21,7 @@ class ChooseTask : Fragment() {
     private val adapter = TaskAdapter {
         val recycle = fragBinding.optionsRecycle
         taskModel.currentTask.value = taskModel.tasks.value!![recycle.getChildAdapterPosition(it)]
-        it.transitionName = getText(R.string.taskHeaderTransitionName).toString()
+        taskModel.transitionName.value = it.transitionName
         requireActivity().supportFragmentManager
             .beginTransaction()
             .addToBackStack(null)
@@ -33,7 +33,7 @@ class ChooseTask : Fragment() {
                     else -> Reading()
                 }
             )
-            .addSharedElement(it as CardView, "cardHeading")
+            .addSharedElement(it, it.transitionName)
             .commit()
     }
 
@@ -55,6 +55,12 @@ class ChooseTask : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+
         taskModel.tasks.observe(activity as LifecycleOwner) {
             adapter.tasks = it
         }

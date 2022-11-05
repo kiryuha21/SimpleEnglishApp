@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import com.example.simple_english.data.Constants
 import com.example.simple_english.databinding.FragmentReadingBinding
@@ -18,7 +19,6 @@ class Reading : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        postponeEnterTransition()
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.fragments_transition)
         sharedElementReturnTransition = TransitionInflater.from(requireContext())
@@ -42,13 +42,17 @@ class Reading : Fragment() {
         fragBinding.readingHeaderPoints.text = "${taskModel.currentTask.value!!.pointsXP} XP"
         fragBinding.readingHeaderDescription.text = taskModel.currentTask.value!!.description
         fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
+        fragBinding.readingHeaderCard.transitionName = taskModel.transitionName.value
 
         return fragBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startPostponedEnterTransition()
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
     }
 
     companion object {
