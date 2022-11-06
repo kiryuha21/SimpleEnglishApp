@@ -7,113 +7,119 @@
     android:background="@color/menu_background"
     tools:context=".InsertWords">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/textContentCard"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        app:cardUseCompatPadding="true"
-        app:contentPaddingLeft="5dp"
-        app:contentPaddingRight="5dp">
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
 
-        <TextView
-            android:id="@+id/textContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="TextView" />
-    </androidx.cardview.widget.CardView>
-
-    <include
-        android:id="@+id/insert_words_include"
-        layout="@layout/common_card_for_fragments" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:orientation="vertical">
+        <include
+            android:id="@+id/insert_words_include"
+            layout="@layout/common_card_for_fragments" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/textContentCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:minWidth="300dp">
+            android:layout_marginTop="60dp"
+            app:cardUseCompatPadding="true"
+            app:contentPaddingLeft="5dp"
+            app:contentPaddingRight="5dp">
 
-            <RadioGroup
-                android:id="@+id/groupRB"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textContent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/firstRB"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="first" />
-
-                <RadioButton
-                    android:id="@+id/secondRB"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:text="second" />
-
-                <RadioButton
-                    android:id="@+id/thirdRB"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="third" />
-            </RadioGroup>
+                android:layout_gravity="center_horizontal"
+                android:text="TextView" />
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/insertWordsInsertButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/insert" />
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:minWidth="300dp">
+
+                <RadioGroup
+                    android:id="@+id/groupRB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/firstRB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:text="first" />
+
+                    <RadioButton
+                        android:id="@+id/secondRB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:text="second" />
+
+                    <RadioButton
+                        android:id="@+id/thirdRB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:text="third" />
+                </RadioGroup>
+            </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/insertWordsBackButton"
-                android:layout_width="wrap_content"
+                android:id="@+id/insertWordsInsertButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/darker_gray"
-                android:text="@string/back" />
+                android:text="@string/insert" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/insertWordsDoneButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/holo_green_light"
-                android:enabled="false"
-                android:text="@string/done" />
+                <Button
+                    android:id="@+id/insertWordsBackButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:text="@string/back" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/insertWordsDoneButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/holo_green_light"
+                    android:enabled="false"
+                    android:text="@string/done" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/insertWordsLoadingProgress"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/insertWordsLoadingProgress"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </FrameLayout>
