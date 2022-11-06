@@ -47,6 +47,12 @@
     <string name="choose_task">Выберите задание</string>
     <string name="done">Выполнено</string>
     <string name="back">Назад</string>
+    <string name="choose">Выбрать</string>
+    <string name="pause">Пауза</string>
+    <string name="resume">Играть/Продолжить</string>
+    <string name="rewind">Перемотать на начало</string>
+    <string name="insert">Вставить</string>
+    <string name="ready">Готово</string>
     <string name="taskHeaderTransitionName">taskHeader%1$d</string>
     <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznetsovie@student.bmstu.ru</string>
 
@@ -56,6 +62,5 @@
         <item>Beginner</item>
         <item>Amateur</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

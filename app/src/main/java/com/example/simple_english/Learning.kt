@@ -40,7 +40,6 @@ class Learning : AppCompatActivity() {
         setNavigationActions()
         setNavHeaderText()
 
-        taskModel.tasksType.value = learningType
         setTasks(learningType)
     }
 

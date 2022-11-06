@@ -26,7 +26,7 @@ class ChooseTask : Fragment() {
             .beginTransaction()
             .addToBackStack(null)
             .replace(
-                R.id.fragmentContainer, when (taskModel.tasksType.value!!) {
+                R.id.fragmentContainer, when (taskModel.currentTask.value!!.taskType) {
                     Constants.audio -> Audio()
                     Constants.theory -> Theory()
                     Constants.insertWords -> InsertWords()

@@ -55,6 +55,7 @@ class MainMenu : AppCompatActivity() {
         learningIntent.putExtra("learning_type", learningType)
         learningIntent.putExtra("user", user)
         startActivity(learningIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        supportFinishAfterTransition()
     }
 
     fun onTheoryCardClicked(view: View) {
