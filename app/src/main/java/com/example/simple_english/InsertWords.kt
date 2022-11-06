@@ -76,7 +76,7 @@ class InsertWords : Fragment() {
     }
 
     private fun fillCard() = with(fragBinding.insertWordsInclude) {
-        readingHeaderImage.setImageResource(when(taskModel.tasksType.value) {
+        readingHeaderImage.setImageResource(when(taskModel.currentTask.value!!.taskType) {
             Constants.audio -> R.drawable.music_disk
             Constants.theory -> R.drawable.study_hat
             Constants.insertWords -> R.drawable.task_list
