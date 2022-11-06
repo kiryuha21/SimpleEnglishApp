@@ -59,9 +59,11 @@ data class User(val id: Int,
 
 @Serializable
 data class TaskContent(val id: Int,
-                       val taskText: String,
-                       val taskVariants: Array<Array<String>>,
-                       val correctVariants: Array<String>)
+                       val taskText: String?,
+                       val taskVariants: Array<Array<String?>?>?,
+                       val correctVariants: Array<String?>?,
+                       val questions: Array<String?>?,
+                       val musicURL: String?)
 
 @Serializable
 data class TaskHeader(val id: Int,

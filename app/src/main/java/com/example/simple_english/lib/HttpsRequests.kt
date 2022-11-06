@@ -2,12 +2,14 @@ package com.example.simple_english.lib
 
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
+import kotlinx.serialization.json.*
 import okhttp3.*
 import okio.IOException
 import java.util.concurrent.TimeUnit
 
 class HttpsRequests {
     private val activeUrlBase = Constants.releaseURL
+    private val musicBaseUrl = "https://cloud-api.yandex.net/v1/disk/public/resources/download?"
     private val client = OkHttpClient().newBuilder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
@@ -57,5 +59,22 @@ class HttpsRequests {
                 }
             }
         })
+    }
+
+    suspend fun getMusicFileUrl(publicKey: String): String {
+        val result: String
+        val finalUrl = musicBaseUrl + "public_key=${java.net.URLEncoder.encode(publicKey, "utf-8")}"
+        val request = Request.Builder().url(finalUrl).get().build()
+
+        client.newCall(request).execute().use { response ->
+            result = when (response.isSuccessful) {
+                true -> {
+                    val json = Json.parseToJsonElement(response.body!!.string())
+                    json.jsonObject["href"]!!.toString().trim('"')
+                }
+                false -> ""
+            }
+        }
+        return result
     }
 }

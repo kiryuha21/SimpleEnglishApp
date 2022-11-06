@@ -43,7 +43,7 @@ class InsertWords : Fragment() {
     ): View {
         fragBinding = FragmentInsertWordsBinding.inflate(inflater)
 
-        tasksCount = taskModel.currentTask.value!!.content.correctVariants.size
+        tasksCount = taskModel.currentTask.value!!.content.correctVariants!!.size
 
         fillCard()
         fillRadioButtons()
@@ -91,7 +91,7 @@ class InsertWords : Fragment() {
     }
 
     private fun onInsertButtonClick() {
-        val rightOption = taskModel.currentTask.value!!.content.correctVariants[choiceCounter]
+        val rightOption = taskModel.currentTask.value!!.content.correctVariants!![choiceCounter]
         val chosenText = fragBinding.root.findViewById<RadioButton>(fragBinding.groupRB.checkedRadioButtonId).text
 
         ++choiceCounter
@@ -115,10 +115,12 @@ class InsertWords : Fragment() {
     }
 
     private fun fillRadioButtons() = with(fragBinding) {
-        val currentVariants = taskModel.currentTask.value!!.content.taskVariants[choiceCounter]
-        firstRB.text = currentVariants[0]
-        secondRB.text = currentVariants[1]
-        thirdRB.text = currentVariants[2]
+        val currentVariants = taskModel.currentTask.value!!.content.taskVariants?.get(choiceCounter)
+        if (currentVariants != null) {
+            firstRB.text = currentVariants[0]
+            secondRB.text = currentVariants[1]
+            thirdRB.text = currentVariants[2]
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
