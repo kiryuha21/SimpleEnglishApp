@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
@@ -22,12 +23,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.io.FileNotFoundException
 
 class Audio : Fragment() {
     private lateinit var fragBinding: FragmentAudioBinding
     private val requests = HttpsRequests()
     private val taskModel: TaskModel by activityViewModels()
     private val player = MediaPlayer()
+    private lateinit var currentActivity: FragmentActivity
     private var choiceCounter = 0
     private var tasksCount = 0
     private var correctAnswers = 0
@@ -35,9 +38,11 @@ class Audio : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+        currentActivity = requireActivity()
+
+        sharedElementEnterTransition = TransitionInflater.from(currentActivity)
             .inflateTransition(R.transition.fragments_transition)
-        sharedElementReturnTransition = TransitionInflater.from(requireContext())
+        sharedElementReturnTransition = TransitionInflater.from(currentActivity)
             .inflateTransition(R.transition.fragments_transition)
     }
 
@@ -58,8 +63,8 @@ class Audio : Fragment() {
             .build())
         var finalURL = ""
 
-        if (!requests.isNetworkAvailable(requireActivity())) {
-            Toast.makeText(requireActivity(), getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
+        if (!requests.isNetworkAvailable(currentActivity)) {
+            Toast.makeText(currentActivity, getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
             setLoadState(isActive = true, withLoad = false)
         } else {
             setLoadState(isActive = true, withLoad = true)
@@ -67,11 +72,17 @@ class Audio : Fragment() {
                 finalURL =
                     requests.getMusicFileUrl(taskModel.currentTask.value!!.content.musicURL!!)
             }.invokeOnCompletion {
-                player.setDataSource(finalURL)
-                player.prepareAsync()
-
-                requireActivity().runOnUiThread {
-                    setLoadState(isActive = false, withLoad = true)
+                try {
+                    player.setDataSource(finalURL)
+                    player.prepareAsync()
+                    currentActivity.runOnUiThread {
+                        setLoadState(isActive = false, withLoad = true)
+                    }
+                } catch (e: FileNotFoundException) {
+                    currentActivity.runOnUiThread {
+                        Toast.makeText(currentActivity, "С аудиофайлом возникла проблема", Toast.LENGTH_SHORT).show()
+                        setLoadState(isActive = true, withLoad = false)
+                    }
                 }
             }
         }
@@ -87,11 +98,10 @@ class Audio : Fragment() {
     }
 
     private fun setLoadState(isActive: Boolean, withLoad: Boolean) = with(fragBinding) {
-        if (withLoad) {
-            audioLoadingProgress.visibility = when (isActive) {
-                true -> View.VISIBLE
-                false -> View.GONE
-            }
+        audioLoadingProgress.visibility = if (isActive && withLoad) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
 
         audioStartButton.isEnabled = !isActive
@@ -99,9 +109,7 @@ class Audio : Fragment() {
         audioRewindButton.isEnabled = !isActive
         audioReadyButton.isEnabled = !isActive
 
-        if (withLoad) {
-            audioBackButton.isEnabled = !isActive
-        }
+        audioBackButton.isEnabled = !(withLoad && isActive)
     }
 
     private fun setButtonListeners() {
@@ -126,7 +134,7 @@ class Audio : Fragment() {
         }
 
         fragBinding.audioBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            currentActivity.supportFragmentManager.popBackStack()
         }
 
         fragBinding.audioDoneButton.setOnClickListener {
@@ -140,7 +148,7 @@ class Audio : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 HttpsRequests().sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
             }.invokeOnCompletion {
-                requireActivity().supportFragmentManager
+                currentActivity.supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, ChooseTask())
                     .commit()
@@ -172,7 +180,7 @@ class Audio : Fragment() {
         }
 
         val toastText = if (rightOption == chosenText) "Правильный ответ" else "неправильный ответ"
-        Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
+        Toast.makeText(currentActivity, toastText, Toast.LENGTH_SHORT).show()
     }
 
     private fun fillRadioButtons() = with(fragBinding) {
