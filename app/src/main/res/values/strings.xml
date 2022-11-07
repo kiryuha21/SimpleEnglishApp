@@ -53,6 +53,9 @@
     <string name="rewind">Перемотать на начало</string>
     <string name="insert">Вставить</string>
     <string name="ready">Готово</string>
+    <string name="no_connection">Нет подключения к интернету!</string>
+    <string name="connect_to_internet">Пожалуйста, подключитесь к интернету</string>
+    <string name="connect_and_reload">Подкобчитесь к интернету и перезагрузите страницу</string>
     <string name="taskHeaderTransitionName">taskHeader%1$d</string>
     <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznetsovie@student.bmstu.ru</string>
 

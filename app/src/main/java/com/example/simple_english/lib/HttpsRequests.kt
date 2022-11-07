@@ -1,5 +1,8 @@
 package com.example.simple_english.lib
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import kotlinx.serialization.json.*
@@ -16,8 +19,41 @@ class HttpsRequests {
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    suspend fun sendAsyncRequest(option: String, body: Map<String, String>, method: HttpMethods): String {
-        val result : String
+    private fun formRequest(option: String, data: FormBody, method: HttpMethods): Request =
+        when (method) {
+            HttpMethods.POST -> Request.Builder().url(activeUrlBase + option).post(data).build()
+            HttpMethods.PUT -> Request.Builder().url(activeUrlBase + option).put(data).build()
+            HttpMethods.GET -> Request.Builder().url(activeUrlBase + option).get().build()
+        }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork // network is currently in a high power state for performing data transmission.
+
+        // return false if network is null
+        network ?: return false
+
+        // return false if Network Capabilities is null
+        val actNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> { // check if wifi is connected
+                true
+            }
+            actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> { // check if mobile dats is connected
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    }
+
+    suspend fun sendAsyncRequest(
+        option: String,
+        body: Map<String, String>,
+        method: HttpMethods
+    ): String {
+        val result: String
 
         val postBody = FormBody.Builder()
         for ((key, value) in body) {
@@ -35,12 +71,6 @@ class HttpsRequests {
         }
 
         return result
-    }
-
-    private fun formRequest(option: String, data : FormBody, method: HttpMethods) : Request = when(method) {
-        HttpMethods.POST -> Request.Builder().url(activeUrlBase + option).post(data).build()
-        HttpMethods.PUT -> Request.Builder().url(activeUrlBase + option).put(data).build()
-        HttpMethods.GET -> Request.Builder().url(activeUrlBase + option).get().build()
     }
 
     fun sendEmptyRequest() {

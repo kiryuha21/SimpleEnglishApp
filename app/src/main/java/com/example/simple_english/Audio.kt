@@ -25,6 +25,7 @@ import kotlinx.serialization.json.Json
 
 class Audio : Fragment() {
     private lateinit var fragBinding: FragmentAudioBinding
+    private val requests = HttpsRequests()
     private val taskModel: TaskModel by activityViewModels()
     private val player = MediaPlayer()
     private var choiceCounter = 0
@@ -56,15 +57,22 @@ class Audio : Fragment() {
             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .build())
         var finalURL = ""
-        setLoadState(true)
-        lifecycleScope.launch(Dispatchers.IO) {
-            finalURL = HttpsRequests().getMusicFileUrl(taskModel.currentTask.value!!.content.musicURL!!)
-        }.invokeOnCompletion {
-            player.setDataSource(finalURL)
-            player.prepareAsync()
 
-            requireActivity().runOnUiThread {
-                setLoadState(false)
+        if (!requests.isNetworkAvailable(requireActivity())) {
+            Toast.makeText(requireActivity(), getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
+            setLoadState(isActive = true, withLoad = false)
+        } else {
+            setLoadState(isActive = true, withLoad = true)
+            lifecycleScope.launch(Dispatchers.IO) {
+                finalURL =
+                    requests.getMusicFileUrl(taskModel.currentTask.value!!.content.musicURL!!)
+            }.invokeOnCompletion {
+                player.setDataSource(finalURL)
+                player.prepareAsync()
+
+                requireActivity().runOnUiThread {
+                    setLoadState(isActive = false, withLoad = true)
+                }
             }
         }
 
@@ -78,17 +86,22 @@ class Audio : Fragment() {
         return fragBinding.root
     }
 
-    private fun setLoadState(isActive: Boolean) = with(fragBinding) {
-        audioLoadingProgress.visibility = when (isActive) {
-            true -> View.VISIBLE
-            false -> View.GONE
+    private fun setLoadState(isActive: Boolean, withLoad: Boolean) = with(fragBinding) {
+        if (withLoad) {
+            audioLoadingProgress.visibility = when (isActive) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
         }
 
         audioStartButton.isEnabled = !isActive
         audioStopButton.isEnabled = !isActive
         audioRewindButton.isEnabled = !isActive
         audioReadyButton.isEnabled = !isActive
-        audioBackButton.isEnabled = !isActive
+
+        if (withLoad) {
+            audioBackButton.isEnabled = !isActive
+        }
     }
 
     private fun setButtonListeners() {

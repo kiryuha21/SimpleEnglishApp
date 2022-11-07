@@ -26,6 +26,7 @@ import kotlinx.serialization.json.Json
 class Learning : AppCompatActivity() {
     private lateinit var binding: ActivityLearningBinding
     private lateinit var user: User
+    private val requests = HttpsRequests()
     private lateinit var learningType: String
     private var doubleBackToExitPressedOnce = false
     private val taskModel: TaskModel by viewModels()
@@ -43,6 +44,10 @@ class Learning : AppCompatActivity() {
         setNavigationActions()
         setNavHeaderText()
 
+        if (!requests.isNetworkAvailable(this)) {
+            Toast.makeText(this, getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
+            return
+        }
         setTasks(learningType)
     }
 
@@ -75,7 +80,7 @@ class Learning : AppCompatActivity() {
     }
 
     private suspend fun loadFromDB(type: String): String {
-        return HttpsRequests().sendAsyncRequest("/find_task_headers_by_type", mapOf("type" to type), HttpMethods.POST)
+        return requests.sendAsyncRequest("/find_task_headers_by_type", mapOf("type" to type), HttpMethods.POST)
     }
 
     private fun setNavHeaderText() {

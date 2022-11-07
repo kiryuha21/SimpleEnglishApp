@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
@@ -23,6 +24,7 @@ import kotlinx.serialization.json.Json
 
 class InsertWords : Fragment() {
     private lateinit var fragBinding: FragmentInsertWordsBinding
+    private val requests = HttpsRequests()
     private val taskModel: TaskModel by activityViewModels()
     private var choiceCounter = 0
     private var tasksCount = 0
@@ -47,6 +49,7 @@ class InsertWords : Fragment() {
 
         fillCard()
         fillRadioButtons()
+
         fragBinding.insertWordsInsertButton.setOnClickListener {
             onInsertButtonClick()
         }
@@ -56,23 +59,32 @@ class InsertWords : Fragment() {
         }
 
         fragBinding.insertWordsDoneButton.setOnClickListener {
-            taskModel.user.value!!.XP += (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
-            taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
-            taskModel.user.value!!.password = ""
-            fragBinding.insertWordsLoadingProgress.visibility = View.VISIBLE
-            val jsonUser = Json.encodeToString(taskModel.user.value!!)
-            val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
-            lifecycleScope.launch(Dispatchers.IO) {
-                HttpsRequests().sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
-            }.invokeOnCompletion {
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, ChooseTask())
-                    .commit()
-            }
+            onInsertWordsDoneButtonClick()
         }
 
         return fragBinding.root
+    }
+
+    private fun onInsertWordsDoneButtonClick() {
+        if (!requests.isNetworkAvailable(requireActivity())) {
+            Toast.makeText(requireActivity(), getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        taskModel.user.value!!.XP += (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
+        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
+        taskModel.user.value!!.password = ""
+        fragBinding.insertWordsLoadingProgress.visibility = View.VISIBLE
+        val jsonUser = Json.encodeToString(taskModel.user.value!!)
+        val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
+        lifecycleScope.launch(Dispatchers.IO) {
+            requests.sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
+        }.invokeOnCompletion {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, ChooseTask())
+                .commit()
+        }
     }
 
     private fun fillCard() = with(fragBinding.insertWordsInclude) {

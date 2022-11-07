@@ -46,7 +46,11 @@ class Settings : AppCompatActivity() {
         setEditOnChange(binding.settingsUserPassword)
         setEditOnChange(binding.settingsUserName)
 
-        requests.sendEmptyRequest()
+        if (requests.isNetworkAvailable(this)) {
+            requests.sendEmptyRequest()
+        } else {
+            Toast.makeText(this, getText(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+        }
 
         user = intent.getSerializableExtra("user") as User
 
@@ -68,6 +72,11 @@ class Settings : AppCompatActivity() {
     fun onSaveButtonClick(view : View) {
         setLoadState(true)
         var updateResult = Constants.searchFailure
+
+        if (!requests.isNetworkAvailable(this)) {
+            Toast.makeText(this, getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
+            return
+        }
 
         lifecycleScope.launch(Dispatchers.IO) {
             updateResult = saveChangesHandling()
@@ -126,7 +135,11 @@ class Settings : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        requests.sendEmptyRequest()
+        if (requests.isNetworkAvailable(this)) {
+            requests.sendEmptyRequest()
+        } else {
+            Toast.makeText(this, getText(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun onMenuImageClick(view: View) {
