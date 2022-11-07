@@ -1,6 +1,6 @@
 package com.example.simple_english
 
-import android.media.AudioManager
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.core.text.HtmlCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,11 +27,9 @@ class Audio : Fragment() {
     private lateinit var fragBinding: FragmentAudioBinding
     private val taskModel: TaskModel by activityViewModels()
     private val player = MediaPlayer()
-    private var playerReady = false
     private var choiceCounter = 0
     private var tasksCount = 0
     private var correctAnswers = 0
-    private val requests = HttpsRequests()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +40,33 @@ class Audio : Fragment() {
             .inflateTransition(R.transition.fragments_transition)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         fragBinding = FragmentAudioBinding.inflate(inflater)
+
+        player.setAudioAttributes(AudioAttributes
+            .Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .build())
+        var finalURL = ""
+        setLoadState(true)
+        lifecycleScope.launch(Dispatchers.IO) {
+            finalURL = HttpsRequests().getMusicFileUrl(taskModel.currentTask.value!!.content.musicURL!!)
+        }.invokeOnCompletion {
+            player.setDataSource(finalURL)
+            player.prepareAsync()
+
+            requireActivity().runOnUiThread {
+                setLoadState(false)
+            }
+        }
 
         fillCard()
         fillRadioButtons()
@@ -56,19 +75,25 @@ class Audio : Fragment() {
         fragBinding.audioCurrentTask.text = taskModel.currentTask.value!!.content.questions!![choiceCounter]
         tasksCount = taskModel.currentTask.value!!.content.correctVariants!!.size
 
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        player.setDataSource(taskModel.currentTask.value!!.content.musicURL)
-
         return fragBinding.root
+    }
+
+    private fun setLoadState(isActive: Boolean) = with(fragBinding) {
+        audioLoadingProgress.visibility = when (isActive) {
+            true -> View.VISIBLE
+            false -> View.GONE
+        }
+
+        audioStartButton.isEnabled = !isActive
+        audioStopButton.isEnabled = !isActive
+        audioRewindButton.isEnabled = !isActive
+        audioReadyButton.isEnabled = !isActive
+        audioBackButton.isEnabled = !isActive
     }
 
     private fun setButtonListeners() {
         fragBinding.audioStartButton.setOnClickListener {
             if (!player.isPlaying) {
-                if (!playerReady) {
-                    player.prepare()
-                    playerReady = true
-                }
                 player.start()
             }
         }
@@ -92,6 +117,7 @@ class Audio : Fragment() {
         }
 
         fragBinding.audioDoneButton.setOnClickListener {
+            player.release()
             taskModel.user.value!!.XP += (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
             taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
             taskModel.user.value!!.password = ""
