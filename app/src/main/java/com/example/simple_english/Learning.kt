@@ -4,6 +4,8 @@ import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +27,7 @@ class Learning : AppCompatActivity() {
     private lateinit var binding: ActivityLearningBinding
     private lateinit var user: User
     private lateinit var learningType: String
+    private var doubleBackToExitPressedOnce = false
     private val taskModel: TaskModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,18 @@ class Learning : AppCompatActivity() {
                 binding.fragmentLoadingProgress.visibility = View.GONE
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getText(R.string.back_button_double_press), Toast.LENGTH_SHORT).show()
+
+        Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
     private suspend fun loadFromDB(type: String): String {
