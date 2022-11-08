@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="34sp" />
+                android:textSize="29sp" />
         </FrameLayout>
 
         <androidx.fragment.app.FragmentContainerView
