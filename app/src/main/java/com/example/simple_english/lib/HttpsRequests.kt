@@ -100,7 +100,7 @@ class HttpsRequests {
             result = when (response.isSuccessful) {
                 true -> {
                     val json = Json.parseToJsonElement(response.body!!.string())
-                    json.jsonObject["href"]!!.toString().trim('"')
+                    json.jsonObject["href"]?.toString()?.trim('"') ?: ""
                 }
                 false -> ""
             }

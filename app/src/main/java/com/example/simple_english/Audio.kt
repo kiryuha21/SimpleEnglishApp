@@ -72,13 +72,13 @@ class Audio : Fragment() {
                 finalURL =
                     requests.getMusicFileUrl(taskModel.currentTask.value!!.content.musicURL!!)
             }.invokeOnCompletion {
-                try {
+                if (finalURL.isNotEmpty()) {
                     player.setDataSource(finalURL)
                     player.prepareAsync()
                     currentActivity.runOnUiThread {
                         setLoadState(isActive = false, withLoad = true)
                     }
-                } catch (e: FileNotFoundException) {
+                } else {
                     currentActivity.runOnUiThread {
                         Toast.makeText(currentActivity, "С аудиофайлом возникла проблема", Toast.LENGTH_SHORT).show()
                         setLoadState(isActive = true, withLoad = false)
