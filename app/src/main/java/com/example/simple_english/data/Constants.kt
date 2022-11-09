@@ -32,6 +32,10 @@ object Constants {
     const val audio = "Аудирование"
     const val memorising = "Запоминание"
 
+    // Extra "education" forms
+    const val translator = "Переводчик"
+    const val statistics = "Статистика"
+
     // Transition names
     const val taskHeaderTransitionName = "taskHeader%d"
 

@@ -156,24 +156,27 @@ class Settings : AppCompatActivity() {
         developersAlert.show()
     }
 
+    private fun startIntent(_class: Class<*>, user: User, extras: Map<String, String>?) {
+        val intent = Intent(this, _class)
+        binding.drawer.closeDrawer(GravityCompat.START)
+
+        intent.putExtra("user", user)
+        if (extras != null) {
+            for ((key, value) in extras) {
+                intent.putExtra(key, value)
+            }
+        }
+
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        supportFinishAfterTransition()
+    }
+
     private fun setNavigationActions() = with(binding) {
         navigation.commonNavigation.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.education -> {
-                    val educationIntent = Intent(this@Settings, MainMenu::class.java)
-                    drawer.closeDrawer(GravityCompat.START)
-                    educationIntent.putExtra("user", user)
-                    startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
-                    supportFinishAfterTransition()
-                }
-                R.id.memorising -> {
-                    val memorisingIntent = Intent(this@Settings, Learning::class.java)
-                    drawer.closeDrawer(GravityCompat.START)
-                    memorisingIntent.putExtra("user", user)
-                    memorisingIntent.putExtra("learning_type", Constants.memorising)
-                    startActivity(memorisingIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
-                    supportFinishAfterTransition()
-                }
+                R.id.education -> startIntent(MainMenu::class.java, user, null)
+                R.id.memorising -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.memorising))
+                R.id.translator -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.translator))
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true

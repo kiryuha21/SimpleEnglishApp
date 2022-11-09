@@ -49,7 +49,18 @@ class Learning : AppCompatActivity() {
             Toast.makeText(this, getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
             return
         }
-        setTasks(learningType)
+
+        when (learningType) {
+            Constants.translator -> showTranslator()
+            else -> setTasks(learningType)
+        }
+    }
+
+    private fun showTranslator() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainer, Translator())
+            .commit()
     }
 
     private fun setTasks(learningType: String) {
@@ -106,7 +117,15 @@ class Learning : AppCompatActivity() {
                 }
                 R.id.memorising -> {
                     learningType = Constants.memorising
+                    binding.learningTypeTV.text = learningType
+                    drawer.closeDrawer(GravityCompat.START)
                     setTasks(learningType)
+                }
+                R.id.translator -> {
+                    learningType = Constants.translator
+                    binding.learningTypeTV.text = learningType
+                    drawer.closeDrawer(GravityCompat.START)
+                    showTranslator()
                 }
                 else -> Toast.makeText(this@Learning, "something pressed", Toast.LENGTH_SHORT).show()
             }
