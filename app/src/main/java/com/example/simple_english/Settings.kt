@@ -112,7 +112,7 @@ class Settings : AppCompatActivity() {
             return Constants.noChanges
         }
 
-        val jsonUser = Json.encodeToString(User(user.id, login, password, user.XP, user.completedTasks, name))
+        val jsonUser = Json.encodeToString(User(user.id, login, password, user.XP, user.completedTasks, user.startedMemories, name))
 
         user.name = name
         user.username = login

@@ -61,7 +61,7 @@ class Reading : Fragment() {
         }
 
         taskModel.user.value!!.XP += taskModel.currentTask.value!!.pointsXP
-        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
+        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id!!
         taskModel.user.value!!.password = ""
         fragBinding.taskLoadingProgress.visibility = View.VISIBLE
         val jsonUser = Json.encodeToString(taskModel.user.value!!)

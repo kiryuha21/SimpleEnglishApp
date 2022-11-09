@@ -1,5 +1,6 @@
 package com.example.simple_english
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
@@ -7,18 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simple_english.data.Constants
+import com.example.simple_english.data.HttpMethods
+import com.example.simple_english.data.TaskContent
+import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.databinding.FragmentChooseTaskBinding
+import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskAdapter
 import com.example.simple_english.lib.TaskModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import me.bush.translator.Language
+import java.sql.Timestamp
 
 class ChooseTask : Fragment() {
     private lateinit var fragBinding: FragmentChooseTaskBinding
     private val taskModel: TaskModel by activityViewModels()
+    private val requests = HttpsRequests()
     private val adapter = TaskAdapter {
         val recycle = fragBinding.optionsRecycle
         taskModel.currentTask.value = taskModel.tasks.value!![recycle.getChildAdapterPosition(it)]
@@ -76,11 +91,75 @@ class ChooseTask : Fragment() {
         fragBinding.optionsRecycle.adapter = adapter
         fragBinding.optionsRecycle.layoutManager = LinearLayoutManager(context)
 
-        if (taskModel.tasks.value!!.first().taskType == Constants.memorising) {
+        buttonConfigure()
+    }
+
+    private fun buttonConfigure() {
+        if (taskModel.currentType.value!! == Constants.memorising) {
+            val edit = EditText(context)
+
+            val addWordAlert = AlertDialog.Builder(context)
+                .setTitle("Добавьте слово")
+                .setView(edit)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok) { dialogInterface, _ ->
+                    run {
+                        fragBinding.memoProgress.visibility = View.VISIBLE
+                        var response = ""
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val header = formHeader(edit.text.toString())
+                            val jsonHeader = Json.encodeToString(header)
+                            response = requests.sendAsyncRequest("/add_task_header", mapOf("stringTaskHeader" to jsonHeader), HttpMethods.POST)
+                        }.invokeOnCompletion {
+                            val newHeader = Json.decodeFromString<TaskHeader>(response)
+                            taskModel.user.value!!.startedMemories += newHeader.id!!
+                            val jsonUser = Json.encodeToString(taskModel.user.value!!)
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                requests.sendAsyncRequest("/update_user", mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
+                            }.invokeOnCompletion {
+                                requireActivity().runOnUiThread {
+                                    fragBinding.memoProgress.visibility = View.GONE
+                                }
+                            }
+                        }
+                        dialogInterface.dismiss()
+                    }
+                }
+                .create()
+
             val button = Button(context)
+            button.setOnClickListener {
+                addWordAlert.show()
+            }
+
             button.text = getText(R.string.add_word)
             fragBinding.chooseTaskLinearLayout.addView(button)
         }
+    }
+
+    private suspend fun formHeader(description: String): TaskHeader {
+        val translator = me.bush.translator.Translator()
+
+        return TaskHeader(
+            id = null,
+            taskType = Constants.memorising,
+            pointsXP = 10,
+            description = description,
+            content = TaskContent(
+                id = null,
+                taskText = translator.translate(
+                    description,
+                    Language.ENGLISH,
+                    Language.RUSSIAN
+                ).translatedText,
+                taskVariants = null,
+                correctVariants = null,
+                questions = null,
+                memLastUpdate = Timestamp(System.currentTimeMillis()),
+                nextNoticeIn = "'30 minutes'",
+                musicURL = null
+            )
+        )
     }
 
     companion object {

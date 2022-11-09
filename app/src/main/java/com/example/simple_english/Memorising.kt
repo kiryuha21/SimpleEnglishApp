@@ -10,6 +10,8 @@ import com.example.simple_english.databinding.FragmentMemorisingBinding
 class Memorising : Fragment() {
     private lateinit var fragBinding: FragmentMemorisingBinding
 
+    // https://www.google.com/search?q={0}&tbm=isch
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

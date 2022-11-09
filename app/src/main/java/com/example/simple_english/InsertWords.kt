@@ -72,7 +72,7 @@ class InsertWords : Fragment() {
         }
 
         taskModel.user.value!!.XP += (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
-        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id
+        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id!!
         taskModel.user.value!!.password = ""
         fragBinding.insertWordsLoadingProgress.visibility = View.VISIBLE
         val jsonUser = Json.encodeToString(taskModel.user.value!!)

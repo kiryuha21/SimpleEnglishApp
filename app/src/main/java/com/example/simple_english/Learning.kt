@@ -40,6 +40,7 @@ class Learning : AppCompatActivity() {
         user = intent.getSerializableExtra("user") as User
         taskModel.user.value = user
         learningType = intent.getStringExtra("learning_type")!!
+        taskModel.currentType.value = learningType
         binding.learningTypeTV.text = learningType
 
         setNavigationActions()
@@ -67,7 +68,14 @@ class Learning : AppCompatActivity() {
     private fun setTasks(learningType: String) {
         binding.fragmentLoadingProgress.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
-            taskModel.tasks.postValue(Json.decodeFromString<ArrayList<TaskHeader>>(loadFromDB(learningType)))
+            taskModel.tasks.postValue(
+                Json.decodeFromString<ArrayList<TaskHeader>>(
+                    if (learningType != Constants.memorising)
+                        loadFromDB(learningType)
+                    else
+                        loadMemorising()
+                )
+            )
         }.invokeOnCompletion {
             supportFragmentManager
                 .beginTransaction()
@@ -90,6 +98,10 @@ class Learning : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.back_button_double_press), Toast.LENGTH_SHORT).show()
 
         Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+    }
+
+    private suspend fun loadMemorising() : String {
+        return requests.sendAsyncRequest("/get_noticeable_headers", mapOf("id" to user.id.toString()), HttpMethods.POST)
     }
 
     private suspend fun loadFromDB(type: String): String {
@@ -119,12 +131,14 @@ class Learning : AppCompatActivity() {
                 R.id.memorising -> {
                     learningType = Constants.memorising
                     binding.learningTypeTV.text = learningType
+                    taskModel.currentType.value = Constants.memorising
                     drawer.closeDrawer(GravityCompat.START)
                     setTasks(learningType)
                 }
                 R.id.translator -> {
                     learningType = Constants.translator
                     binding.learningTypeTV.text = learningType
+                    taskModel.currentType.value = Constants.translator
                     drawer.closeDrawer(GravityCompat.START)
                     showTranslator()
                 }
