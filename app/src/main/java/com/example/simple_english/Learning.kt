@@ -52,6 +52,7 @@ class Learning : AppCompatActivity() {
 
         when (learningType) {
             Constants.translator -> showTranslator()
+            // Constants.statistics -> showStatistics()
             else -> setTasks(learningType)
         }
     }

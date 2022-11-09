@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.RotateAnimation
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.simple_english.databinding.FragmentTranslatorBinding
 import me.bush.translator.Language
@@ -58,16 +59,26 @@ class Translator : Fragment() {
         }
 
         fragBinding.translateButton.setOnClickListener {
-            val translation = translator.translateBlocking(
-                fragBinding.textToTranslate.text.toString(),
-                if (currentSourceLanguage == Language.RUSSIAN) Language.ENGLISH else Language.RUSSIAN,
-                currentSourceLanguage)
-
-            fragBinding.translatedText.text = translation.translatedText
-            fragBinding.pronunciation.text = translation.pronunciation
+            translateText()
         }
 
         return fragBinding.root
+    }
+
+    private fun translateText() {
+        val sourceText = fragBinding.textToTranslate.text.toString()
+        if (sourceText.isEmpty()) {
+            Toast.makeText(context, "Введите текст для перевода!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val translation = translator.translateBlocking(
+            sourceText,
+            if (currentSourceLanguage == Language.RUSSIAN) Language.ENGLISH else Language.RUSSIAN,
+            currentSourceLanguage)
+
+        fragBinding.translatedText.text = translation.translatedText
+        fragBinding.pronunciation.text = translation.pronunciation
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
