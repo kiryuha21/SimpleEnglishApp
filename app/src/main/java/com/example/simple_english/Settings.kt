@@ -166,6 +166,14 @@ class Settings : AppCompatActivity() {
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
                     supportFinishAfterTransition()
                 }
+                R.id.memorising -> {
+                    val memorisingIntent = Intent(this@Settings, Learning::class.java)
+                    drawer.closeDrawer(GravityCompat.START)
+                    memorisingIntent.putExtra("user", user)
+                    memorisingIntent.putExtra("learning_type", Constants.memorising)
+                    startActivity(memorisingIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
+                    supportFinishAfterTransition()
+                }
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true

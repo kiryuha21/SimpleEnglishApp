@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
@@ -30,6 +31,7 @@ class ChooseTask : Fragment() {
                     Constants.audio -> Audio()
                     Constants.theory -> Theory()
                     Constants.insertWords -> InsertWords()
+                    Constants.memorising -> Memorising()
                     else -> Reading()
                 }
             )
@@ -73,6 +75,12 @@ class ChooseTask : Fragment() {
         }
         fragBinding.optionsRecycle.adapter = adapter
         fragBinding.optionsRecycle.layoutManager = LinearLayoutManager(context)
+
+        if (taskModel.tasks.value!!.first().taskType == Constants.memorising) {
+            val button = Button(context)
+            button.text = getText(R.string.add_word)
+            fragBinding.chooseTaskLinearLayout.addView(button)
+        }
     }
 
     companion object {

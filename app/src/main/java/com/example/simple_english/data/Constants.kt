@@ -30,6 +30,7 @@ object Constants {
     const val theory = "Теория"
     const val insertWords = "Вставьте слова"
     const val audio = "Аудирование"
+    const val memorising = "Запоминание"
 
     // Transition names
     const val taskHeaderTransitionName = "taskHeader%d"

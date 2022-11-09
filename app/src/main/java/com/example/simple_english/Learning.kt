@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.data.User
@@ -102,6 +103,10 @@ class Learning : AppCompatActivity() {
                     educationIntent.putExtra("user", user)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Learning).toBundle())
                     supportFinishAfterTransition()
+                }
+                R.id.memorising -> {
+                    learningType = Constants.memorising
+                    setTasks(learningType)
                 }
                 else -> Toast.makeText(this@Learning, "something pressed", Toast.LENGTH_SHORT).show()
             }

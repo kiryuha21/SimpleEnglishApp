@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.simple_english.databinding.FragmentTheoryBinding
+import com.example.simple_english.databinding.FragmentMemorisingBinding
 
-class Theory : Fragment() {
-    private lateinit var fragBinding: FragmentTheoryBinding
+class Memorising : Fragment() {
+    private lateinit var fragBinding: FragmentMemorisingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +18,13 @@ class Theory : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragBinding = FragmentTheoryBinding.inflate(inflater)
+        fragBinding = FragmentMemorisingBinding.inflate(inflater)
 
         return fragBinding.root
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = Theory()
+        fun newInstance() = Memorising()
     }
 }
