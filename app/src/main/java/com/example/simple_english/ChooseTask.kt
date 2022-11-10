@@ -104,24 +104,7 @@ class ChooseTask : Fragment() {
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok) { dialogInterface, _ ->
                     run {
-                        fragBinding.memoProgress.visibility = View.VISIBLE
-                        var response = ""
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val header = formHeader(edit.text.toString())
-                            val jsonHeader = Json.encodeToString(header)
-                            response = requests.sendAsyncRequest("/add_task_header", mapOf("stringTaskHeader" to jsonHeader), HttpMethods.POST)
-                        }.invokeOnCompletion {
-                            val newHeader = Json.decodeFromString<TaskHeader>(response)
-                            taskModel.user.value!!.startedMemories += newHeader.id!!
-                            val jsonUser = Json.encodeToString(taskModel.user.value!!)
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                requests.sendAsyncRequest("/update_user", mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
-                            }.invokeOnCompletion {
-                                requireActivity().runOnUiThread {
-                                    fragBinding.memoProgress.visibility = View.GONE
-                                }
-                            }
-                        }
+                        alertConfirmPressed(edit.text.toString())
                         dialogInterface.dismiss()
                     }
                 }
@@ -134,6 +117,28 @@ class ChooseTask : Fragment() {
 
             button.text = getText(R.string.add_word)
             fragBinding.chooseTaskLinearLayout.addView(button)
+        }
+    }
+
+    private fun alertConfirmPressed(text: String) {
+        fragBinding.memoProgress.visibility = View.VISIBLE
+        var response = ""
+        lifecycleScope.launch(Dispatchers.IO) {
+            val header = formHeader(text)
+            val jsonHeader = Json.encodeToString(header)
+            response = requests.sendAsyncRequest("/add_task_header", mapOf("stringTaskHeader" to jsonHeader), HttpMethods.POST)
+        }.invokeOnCompletion {
+            val newHeader = Json.decodeFromString<TaskHeader>(response)
+            taskModel.user.value!!.startedMemories += newHeader.id!!
+            taskModel.user.value!!.password = ""
+            val jsonUser = Json.encodeToString(taskModel.user.value!!)
+            lifecycleScope.launch(Dispatchers.IO) {
+                requests.sendAsyncRequest("/update_user", mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
+            }.invokeOnCompletion {
+                requireActivity().runOnUiThread {
+                    fragBinding.memoProgress.visibility = View.GONE
+                }
+            }
         }
     }
 

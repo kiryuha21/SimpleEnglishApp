@@ -63,4 +63,8 @@ dependencies {
 
     // translator
     implementation 'com.github.therealbush:translator:1.0.2'
+
+    // picture loading
+    implementation 'io.coil-kt:coil:2.2.2'
+    implementation 'org.jsoup:jsoup:1.15.3'
 }
