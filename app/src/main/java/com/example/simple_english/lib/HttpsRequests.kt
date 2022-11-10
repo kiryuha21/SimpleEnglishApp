@@ -8,6 +8,7 @@ import com.example.simple_english.data.HttpMethods
 import kotlinx.serialization.json.*
 import okhttp3.*
 import okio.IOException
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 class HttpsRequests {
@@ -93,7 +94,7 @@ class HttpsRequests {
 
     suspend fun getMusicFileUrl(publicKey: String): String {
         val result: String
-        val finalUrl = musicBaseUrl + "public_key=${java.net.URLEncoder.encode(publicKey, "utf-8")}"
+        val finalUrl = musicBaseUrl + "public_key=${URLEncoder.encode(publicKey, "utf-8")}"
         val request = Request.Builder().url(finalUrl).get().build()
 
         client.newCall(request).execute().use { response ->
@@ -106,5 +107,30 @@ class HttpsRequests {
             }
         }
         return result
+    }
+
+    suspend fun getWithHeaders(url: String, headers: Map<String, String>): JsonElement {
+        val headerBuilder = Headers.Builder()
+        for ((key, value) in headers) {
+            headerBuilder.add(key, value)
+        }
+        val readyHeaders = headerBuilder.build()
+
+        val request = Request.Builder().url(url).headers(readyHeaders).get().build()
+
+        lateinit var result: JsonElement
+        client.newCall(request).execute().use { response ->
+            result = Json.parseToJsonElement(response.body!!.string())
+        }
+        return result
+    }
+
+    fun formQuery(map: Map<String, String>): String {
+        return map.entries.stream()
+            .map { (k, v) ->
+                "${URLEncoder.encode(k, "utf-8")}=${URLEncoder.encode(v.toString(), "utf-8")}"
+            }
+            .reduce { p1, p2 -> "$p1&$p2" }
+            .orElse("")
     }
 }

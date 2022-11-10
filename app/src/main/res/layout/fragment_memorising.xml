@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="70dp"
             android:layout_marginEnd="30dp"
             android:orientation="vertical">
 
@@ -24,6 +24,8 @@
                 android:id="@+id/wordPicture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxHeight="400dp"
+                android:minHeight="100dp"
                 tools:src="@tools:sample/avatars" />
 
             <EditText
@@ -31,14 +33,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:hint="@string/enter_translation"
+                android:inputType="textPersonName" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/memoReadyButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="@string/ready" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,7 +50,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/memoBackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/darker_gray"
@@ -60,16 +62,25 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/memoDoneButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/holo_green_light"
+                android:enabled="false"
                 android:text="@string/done" />
         </LinearLayout>
 
         <include
             android:id="@+id/memorising_include"
             layout="@layout/common_card_for_fragments" />
+
+        <ProgressBar
+            android:id="@+id/memoLoading"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
     </FrameLayout>
 

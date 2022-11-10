@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,17 +15,16 @@ import com.example.simple_english.data.Constants
 import com.example.simple_english.databinding.FragmentMemorisingBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
-import io.ktor.util.Identity.encode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
 
 class Memorising : Fragment() {
     private lateinit var fragBinding: FragmentMemorisingBinding
     private val requests = HttpsRequests()
     private val taskModel: TaskModel by activityViewModels()
-    private val searchBase = "https://www.google.com/search?q=%s&tbm=isch"
+    private val searchBase = "https://api.openverse.engineering/v1/images?q="
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,19 +64,35 @@ class Memorising : Fragment() {
     }
 
     private fun fillContent() {
-        val url = String.format(searchBase, taskModel.currentTask.value!!.description)
-        println(url)
-        lateinit var image: Element
+        val headers = mapOf("Authorization" to "Bearer vZufVHly8ZufjPl0LKbX2Og8KbBauG")
+        val url = searchBase + taskModel.currentTask.value!!.content.taskText
+        setLoadState(isActive = true, withLoad = true)
+
         lifecycleScope.launch(Dispatchers.IO) {
-            val doc = Jsoup.connect(url).get()
-            image = doc.select("img")[0]
+            val jsonResp = requests.getWithHeaders(url, headers)
+            val picUrl = jsonResp.jsonObject["results"]?.jsonArray?.get(0)?.jsonObject?.get("url").toString()
+            val picUri = picUrl.toUri().buildUpon().scheme("https").build()
+
+            fragBinding.wordPicture.load(picUri) {
+                placeholder(R.drawable.loading_animation)
+                error(R.drawable.ic_broken_image)
+            }
         }.invokeOnCompletion {
-            lifecycleScope.launch(Dispatchers.IO) {
-                fragBinding.wordPicture.load(image.attr("data-src")) {
-                    placeholder(R.drawable.loading_animation)
-                }
+            requireActivity().runOnUiThread {
+                setLoadState(isActive = false, withLoad = true)
             }
         }
+    }
+
+    private fun setLoadState(isActive: Boolean, withLoad: Boolean) = with(fragBinding) {
+        memoLoading.visibility = if (isActive && withLoad) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        memoReadyButton.isEnabled = !isActive
+        memoBackButton.isEnabled = !(withLoad && isActive)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
