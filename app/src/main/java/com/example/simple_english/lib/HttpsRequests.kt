@@ -1,10 +1,14 @@
 package com.example.simple_english.lib
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import kotlinx.serialization.json.*
 import okhttp3.*
 import okio.IOException
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 class HttpsRequests {
@@ -16,8 +20,41 @@ class HttpsRequests {
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    suspend fun sendAsyncRequest(option: String, body: Map<String, String>, method: HttpMethods): String {
-        val result : String
+    private fun formRequest(option: String, data: FormBody, method: HttpMethods): Request =
+        when (method) {
+            HttpMethods.POST -> Request.Builder().url(activeUrlBase + option).post(data).build()
+            HttpMethods.PUT -> Request.Builder().url(activeUrlBase + option).put(data).build()
+            HttpMethods.GET -> Request.Builder().url(activeUrlBase + option).get().build()
+        }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork // network is currently in a high power state for performing data transmission.
+
+        // return false if network is null
+        network ?: return false
+
+        // return false if Network Capabilities is null
+        val actNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> { // check if wifi is connected
+                true
+            }
+            actNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> { // check if mobile dats is connected
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    }
+
+    suspend fun sendAsyncRequest(
+        option: String,
+        body: Map<String, String>,
+        method: HttpMethods
+    ): String {
+        val result: String
 
         val postBody = FormBody.Builder()
         for ((key, value) in body) {
@@ -35,12 +72,6 @@ class HttpsRequests {
         }
 
         return result
-    }
-
-    private fun formRequest(option: String, data : FormBody, method: HttpMethods) : Request = when(method) {
-        HttpMethods.POST -> Request.Builder().url(activeUrlBase + option).post(data).build()
-        HttpMethods.PUT -> Request.Builder().url(activeUrlBase + option).put(data).build()
-        HttpMethods.GET -> Request.Builder().url(activeUrlBase + option).get().build()
     }
 
     fun sendEmptyRequest() {
@@ -63,18 +94,43 @@ class HttpsRequests {
 
     suspend fun getMusicFileUrl(publicKey: String): String {
         val result: String
-        val finalUrl = musicBaseUrl + "public_key=${java.net.URLEncoder.encode(publicKey, "utf-8")}"
+        val finalUrl = musicBaseUrl + "public_key=${URLEncoder.encode(publicKey, "utf-8")}"
         val request = Request.Builder().url(finalUrl).get().build()
 
         client.newCall(request).execute().use { response ->
             result = when (response.isSuccessful) {
                 true -> {
                     val json = Json.parseToJsonElement(response.body!!.string())
-                    json.jsonObject["href"]!!.toString().trim('"')
+                    json.jsonObject["href"]?.toString()?.trim('"') ?: ""
                 }
                 false -> ""
             }
         }
         return result
+    }
+
+    suspend fun getWithHeaders(url: String, headers: Map<String, String>): JsonElement {
+        val headerBuilder = Headers.Builder()
+        for ((key, value) in headers) {
+            headerBuilder.add(key, value)
+        }
+        val readyHeaders = headerBuilder.build()
+
+        val request = Request.Builder().url(url).headers(readyHeaders).get().build()
+
+        lateinit var result: JsonElement
+        client.newCall(request).execute().use { response ->
+            result = Json.parseToJsonElement(response.body!!.string())
+        }
+        return result
+    }
+
+    fun formQuery(map: Map<String, String>): String {
+        return map.entries.stream()
+            .map { (k, v) ->
+                "${URLEncoder.encode(k, "utf-8")}=${URLEncoder.encode(v.toString(), "utf-8")}"
+            }
+            .reduce { p1, p2 -> "$p1&$p2" }
+            .orElse("")
     }
 }

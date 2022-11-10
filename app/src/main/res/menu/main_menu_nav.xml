@@ -6,7 +6,7 @@
     <item android:title="category1">
         <menu>
             <item android:title="@string/education_icon_text" android:id="@+id/education" android:icon="@drawable/ic_study" />
-            <item android:title="@string/memoring_icon_text" android:id="@+id/memoring" android:icon="@drawable/ic_calendar" />
+            <item android:title="@string/memoring_icon_text" android:id="@+id/memorising" android:icon="@drawable/ic_calendar" />
             <item android:title="@string/translator_icon_text" android:id="@+id/translator" android:icon="@drawable/ic_translate" />
             <item android:title="@string/achievements_icon_text" android:id="@+id/achievements" android:icon="@drawable/ic_achievements" />
             <item android:title="@string/statistics_icon_text" android:id="@+id/statistics" android:icon="@drawable/ic_stats" />

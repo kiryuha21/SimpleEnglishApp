@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.data.User
@@ -26,6 +27,7 @@ import kotlinx.serialization.json.Json
 class Learning : AppCompatActivity() {
     private lateinit var binding: ActivityLearningBinding
     private lateinit var user: User
+    private val requests = HttpsRequests()
     private lateinit var learningType: String
     private var doubleBackToExitPressedOnce = false
     private val taskModel: TaskModel by viewModels()
@@ -38,18 +40,42 @@ class Learning : AppCompatActivity() {
         user = intent.getSerializableExtra("user") as User
         taskModel.user.value = user
         learningType = intent.getStringExtra("learning_type")!!
+        taskModel.currentType.value = learningType
         binding.learningTypeTV.text = learningType
 
         setNavigationActions()
         setNavHeaderText()
 
-        setTasks(learningType)
+        if (!requests.isNetworkAvailable(this)) {
+            Toast.makeText(this, getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        when (learningType) {
+            Constants.translator -> showTranslator()
+            // Constants.statistics -> showStatistics()
+            else -> setTasks(learningType)
+        }
+    }
+
+    private fun showTranslator() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainer, Translator())
+            .commit()
     }
 
     private fun setTasks(learningType: String) {
         binding.fragmentLoadingProgress.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
-            taskModel.tasks.postValue(Json.decodeFromString<ArrayList<TaskHeader>>(loadFromDB(learningType)))
+            taskModel.tasks.postValue(
+                Json.decodeFromString<ArrayList<TaskHeader>>(
+                    if (learningType != Constants.memorising)
+                        loadFromDB(learningType)
+                    else
+                        loadMemorising()
+                )
+            )
         }.invokeOnCompletion {
             supportFragmentManager
                 .beginTransaction()
@@ -74,8 +100,12 @@ class Learning : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
+    private suspend fun loadMemorising() : String {
+        return requests.sendAsyncRequest("/get_noticeable_headers", mapOf("id" to user.id.toString()), HttpMethods.POST)
+    }
+
     private suspend fun loadFromDB(type: String): String {
-        return HttpsRequests().sendAsyncRequest("/find_task_headers_by_type", mapOf("type" to type), HttpMethods.POST)
+        return requests.sendAsyncRequest("/find_task_headers_by_type", mapOf("type" to type), HttpMethods.POST)
     }
 
     private fun setNavHeaderText() {
@@ -97,6 +127,20 @@ class Learning : AppCompatActivity() {
                     educationIntent.putExtra("user", user)
                     startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Learning).toBundle())
                     supportFinishAfterTransition()
+                }
+                R.id.memorising -> {
+                    learningType = Constants.memorising
+                    binding.learningTypeTV.text = learningType
+                    taskModel.currentType.value = Constants.memorising
+                    drawer.closeDrawer(GravityCompat.START)
+                    setTasks(learningType)
+                }
+                R.id.translator -> {
+                    learningType = Constants.translator
+                    binding.learningTypeTV.text = learningType
+                    taskModel.currentType.value = Constants.translator
+                    drawer.closeDrawer(GravityCompat.START)
+                    showTranslator()
                 }
                 else -> Toast.makeText(this@Learning, "something pressed", Toast.LENGTH_SHORT).show()
             }

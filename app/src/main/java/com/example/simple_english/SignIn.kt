@@ -65,7 +65,11 @@ class SignIn : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        requests.sendEmptyRequest()
+        if (requests.isNetworkAvailable(this)) {
+            requests.sendEmptyRequest()
+        } else {
+            Toast.makeText(this, getText(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +77,11 @@ class SignIn : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        requests.sendEmptyRequest()
+        if (requests.isNetworkAvailable(this)) {
+            requests.sendEmptyRequest()
+        } else {
+            Toast.makeText(this, getText(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+        }
 
         setEditOnChange(binding.login)
         setEditOnChange(binding.password)
@@ -89,6 +97,11 @@ class SignIn : AppCompatActivity() {
     fun onSignInButtonClick(view: View) {
         hideKeyboard(view)
         var authResult = Constants.searchFailure
+
+        if (!requests.isNetworkAvailable(this)) {
+            Toast.makeText(this, getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
+            return
+        }
 
         setLoadState(true)
         lifecycleScope.launch(Dispatchers.IO) {

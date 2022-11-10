@@ -8,6 +8,7 @@
     tools:context=".ChooseTask">
 
     <LinearLayout
+        android:id="@+id/chooseTaskLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -29,5 +30,13 @@
             tools:listitem="@layout/task_item" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/memoProgress"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </FrameLayout>

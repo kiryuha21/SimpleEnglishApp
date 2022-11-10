@@ -3,6 +3,7 @@ package com.example.simple_english
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.Constants
 import com.example.simple_english.data.HttpMethods
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class SignUp : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
+    private val requests = HttpsRequests()
 
     private fun setLoadState(isActive: Boolean) = with(binding) {
         signUpProgress.visibility = when (isActive) {
@@ -42,6 +44,12 @@ class SignUp : AppCompatActivity() {
     fun onSignUpButtonClick(view: View) {
         hideKeyboard(view)
         var signUpResult = Constants.addError
+
+        if (!requests.isNetworkAvailable(this)) {
+            Toast.makeText(this, getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
+            return
+        }
+
         setLoadState(true)
         lifecycleScope.launch(Dispatchers.IO) {
             signUpResult = signUpHandling()
@@ -86,7 +94,6 @@ class SignUp : AppCompatActivity() {
             return Constants.badPattern
         }
 
-        val requests = HttpsRequests()
         val response = requests.sendAsyncRequest(
             "/add_user",
             mapOf("username" to usernameString, "password" to passwordString),

@@ -46,7 +46,11 @@ class Settings : AppCompatActivity() {
         setEditOnChange(binding.settingsUserPassword)
         setEditOnChange(binding.settingsUserName)
 
-        requests.sendEmptyRequest()
+        if (requests.isNetworkAvailable(this)) {
+            requests.sendEmptyRequest()
+        } else {
+            Toast.makeText(this, getText(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+        }
 
         user = intent.getSerializableExtra("user") as User
 
@@ -68,6 +72,11 @@ class Settings : AppCompatActivity() {
     fun onSaveButtonClick(view : View) {
         setLoadState(true)
         var updateResult = Constants.searchFailure
+
+        if (!requests.isNetworkAvailable(this)) {
+            Toast.makeText(this, getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
+            return
+        }
 
         lifecycleScope.launch(Dispatchers.IO) {
             updateResult = saveChangesHandling()
@@ -103,7 +112,7 @@ class Settings : AppCompatActivity() {
             return Constants.noChanges
         }
 
-        val jsonUser = Json.encodeToString(User(user.id, login, password, user.XP, user.completedTasks, name))
+        val jsonUser = Json.encodeToString(User(user.id, login, password, user.XP, user.completedTasks, user.startedMemories, name))
 
         user.name = name
         user.username = login
@@ -126,7 +135,11 @@ class Settings : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        requests.sendEmptyRequest()
+        if (requests.isNetworkAvailable(this)) {
+            requests.sendEmptyRequest()
+        } else {
+            Toast.makeText(this, getText(R.string.connect_to_internet), Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun onMenuImageClick(view: View) {
@@ -143,16 +156,27 @@ class Settings : AppCompatActivity() {
         developersAlert.show()
     }
 
+    private fun startIntent(_class: Class<*>, user: User, extras: Map<String, String>?) {
+        val intent = Intent(this, _class)
+        binding.drawer.closeDrawer(GravityCompat.START)
+
+        intent.putExtra("user", user)
+        if (extras != null) {
+            for ((key, value) in extras) {
+                intent.putExtra(key, value)
+            }
+        }
+
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        supportFinishAfterTransition()
+    }
+
     private fun setNavigationActions() = with(binding) {
         navigation.commonNavigation.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.education -> {
-                    val educationIntent = Intent(this@Settings, MainMenu::class.java)
-                    drawer.closeDrawer(GravityCompat.START)
-                    educationIntent.putExtra("user", user)
-                    startActivity(educationIntent, ActivityOptions.makeSceneTransitionAnimation(this@Settings).toBundle())
-                    supportFinishAfterTransition()
-                }
+                R.id.education -> startIntent(MainMenu::class.java, user, null)
+                R.id.memorising -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.memorising))
+                R.id.translator -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.translator))
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true

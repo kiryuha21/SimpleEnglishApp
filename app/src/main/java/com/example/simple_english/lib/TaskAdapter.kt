@@ -11,7 +11,8 @@ import com.example.simple_english.data.Constants
 import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.databinding.TaskItemBinding
 
-class TaskAdapter(private val clickListener: (View) -> Unit): RecyclerView.Adapter<TaskAdapter.TaskHolder>() {
+class TaskAdapter(private val clickListener: (View) -> Unit) :
+    RecyclerView.Adapter<TaskAdapter.TaskHolder>() {
     var tasks = ArrayList<TaskHeader>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
@@ -27,23 +28,26 @@ class TaskAdapter(private val clickListener: (View) -> Unit): RecyclerView.Adapt
         return tasks.size
     }
 
-    class TaskHolder(item: View): RecyclerView.ViewHolder(item) {
+    class TaskHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = TaskItemBinding.bind(item)
 
         fun bind(task: TaskHeader, position: Int, clickListener: (View) -> Unit) = with(binding) {
-            studyType.setImageResource(when(task.taskType) {
-                Constants.audio -> drawable.music_disk
-                Constants.theory -> drawable.study_hat
-                Constants.insertWords -> drawable.task_list
-                else -> drawable.book
-            })
+            studyType.setImageResource(
+                when (task.taskType) {
+                    Constants.audio -> drawable.music_disk
+                    Constants.theory -> drawable.study_hat
+                    Constants.insertWords -> drawable.task_list
+                    Constants.memorising -> drawable.ic_calendar
+                    else -> drawable.book
+                }
+            )
             taskNameTV.text = task.description
             when (task.pointsXP) {
                 Constants.doneTask -> {
                     pointsTV.text = "Выполнено"
                     taskCard.setCardBackgroundColor(Color.parseColor(Constants.doneColor))
                 }
-                else  -> {
+                else -> {
                     pointsTV.text = "${task.pointsXP} XP"
                     taskCard.setOnClickListener(clickListener)
                 }

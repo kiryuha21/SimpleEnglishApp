@@ -6,24 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.example.simple_english.data.Constants
-import com.example.simple_english.data.HttpMethods
-import com.example.simple_english.databinding.FragmentReadingBinding
+import com.example.simple_english.databinding.FragmentMemorisingBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
 
-class Reading : Fragment() {
-    private lateinit var fragBinding: FragmentReadingBinding
+class Memorising : Fragment() {
+    private lateinit var fragBinding: FragmentMemorisingBinding
     private val requests = HttpsRequests()
     private val taskModel: TaskModel by activityViewModels()
+    private val searchBase = "https://api.openverse.engineering/v1/images?q="
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,52 +36,23 @@ class Reading : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragBinding = FragmentReadingBinding.inflate(inflater)
+        fragBinding = FragmentMemorisingBinding.inflate(inflater)
 
         fillCard()
-
-        fragBinding.readingBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-
-        fragBinding.readingDoneButton.setOnClickListener {
-            onReadingDoneButtonClick()
-        }
+        fillContent()
 
         return fragBinding.root
     }
 
-    private fun onReadingDoneButtonClick() {
-        if (!requests.isNetworkAvailable(requireActivity())) {
-            Toast.makeText(requireActivity(), getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        taskModel.user.value!!.XP += taskModel.currentTask.value!!.pointsXP
-        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id!!
-        taskModel.user.value!!.password = ""
-        fragBinding.taskLoadingProgress.visibility = View.VISIBLE
-        val jsonUser = Json.encodeToString(taskModel.user.value!!)
-        val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
-        lifecycleScope.launch(Dispatchers.IO) {
-            requests.sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
-        }.invokeOnCompletion {
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, ChooseTask())
-                .commit()
-        }
-    }
-
-    private fun fillCard() = with(fragBinding.readingInclude) {
+    private fun fillCard() = with(fragBinding.memorisingInclude) {
         readingHeaderImage.setImageResource(when(taskModel.currentTask.value!!.taskType) {
             Constants.audio -> R.drawable.music_disk
             Constants.theory -> R.drawable.study_hat
             Constants.insertWords -> R.drawable.task_list
+            Constants.memorising -> R.drawable.ic_calendar
             else -> R.drawable.book
         })
 
@@ -88,7 +60,39 @@ class Reading : Fragment() {
         readingHeaderDescription.text = taskModel.currentTask.value!!.description
         readingHeaderCard.transitionName = taskModel.transitionName.value
 
-        fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
+        //fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
+    }
+
+    private fun fillContent() {
+        val headers = mapOf("Authorization" to "Bearer vZufVHly8ZufjPl0LKbX2Og8KbBauG")
+        val url = searchBase + taskModel.currentTask.value!!.content.taskText
+        setLoadState(isActive = true, withLoad = true)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val jsonResp = requests.getWithHeaders(url, headers)
+            val picUrl = jsonResp.jsonObject["results"]?.jsonArray?.get(0)?.jsonObject?.get("url").toString()
+            val picUri = picUrl.toUri().buildUpon().scheme("https").build()
+
+            fragBinding.wordPicture.load(picUri) {
+                placeholder(R.drawable.loading_animation)
+                error(R.drawable.ic_broken_image)
+            }
+        }.invokeOnCompletion {
+            requireActivity().runOnUiThread {
+                setLoadState(isActive = false, withLoad = true)
+            }
+        }
+    }
+
+    private fun setLoadState(isActive: Boolean, withLoad: Boolean) = with(fragBinding) {
+        memoLoading.visibility = if (isActive && withLoad) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        memoReadyButton.isEnabled = !isActive
+        memoBackButton.isEnabled = !(withLoad && isActive)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -101,6 +105,6 @@ class Reading : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = Reading()
+        fun newInstance() = Memorising()
     }
 }

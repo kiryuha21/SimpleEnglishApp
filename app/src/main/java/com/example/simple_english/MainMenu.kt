@@ -82,6 +82,8 @@ class MainMenu : AppCompatActivity() {
         navigation.commonNavigation.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.education -> Toast.makeText(this@MainMenu, getText(R.string.already_here), Toast.LENGTH_SHORT).show()
+                R.id.memorising -> learningActivityStart(Constants.memorising)
+                R.id.translator -> learningActivityStart(Constants.translator)
                 else -> Toast.makeText(this@MainMenu, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true
