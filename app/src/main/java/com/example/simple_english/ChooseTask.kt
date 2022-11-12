@@ -161,7 +161,7 @@ class ChooseTask : Fragment() {
                 correctVariants = null,
                 questions = null,
                 memLastUpdate = Timestamp(System.currentTimeMillis()),
-                nextNoticeIn = "'30 minutes'",
+                nextNoticeIn = "'0 seconds'",
                 musicURL = null
             )
         )

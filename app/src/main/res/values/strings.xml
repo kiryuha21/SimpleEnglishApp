@@ -64,6 +64,8 @@
     <string name="pronunciation_ru">Произношение</string>
     <string name="pronunciation_en">Pronunciation</string>
     <string name="enter_translation">Введите перевод</string>
+    <string name="correct_answer">Правильный ответ</string>
+    <string name="incorrect_answer">Неправильный ответ</string>
     <string name="no_connection">Нет подключения к интернету!</string>
     <string name="connect_to_internet">Пожалуйста, подключитесь к интернету</string>
     <string name="connect_and_reload">Подключитесь к интернету и перезагрузите страницу</string>
