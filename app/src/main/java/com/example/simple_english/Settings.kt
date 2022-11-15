@@ -177,6 +177,7 @@ class Settings : AppCompatActivity() {
                 R.id.education -> startIntent(MainMenu::class.java, user, null)
                 R.id.memorising -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.memorising))
                 R.id.translator -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.translator))
+                R.id.statistics -> startIntent(Learning::class.java, user, mapOf("learning_type" to Constants.statistics))
                 else -> Toast.makeText(this@Settings, "something pressed", Toast.LENGTH_SHORT).show()
             }
             true
