@@ -10,19 +10,18 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="@string/sign_up_text"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,10 +33,10 @@
             android:id="@+id/userLoginLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:transitionName="login"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:errorEnabled="true"
-            android:transitionName="login">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/userLogin"
@@ -52,7 +51,7 @@
             android:id="@+id/userPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16sp"
+            android:layout_marginTop="16dp"
             android:transitionName="password"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
@@ -72,7 +71,7 @@
             android:id="@+id/userPasswordRepeatLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16sp"
+            android:layout_marginTop="16dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
             app:errorEnabled="true"
@@ -91,15 +90,31 @@
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16sp"
-            android:text="@string/english_level_text" />
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="@string/secret_word_text" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/english_levels"
+            android:entries="@array/secret_types"
             android:minHeight="48dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userSecretLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userSecret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/secret_word_hint" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
@@ -107,17 +122,15 @@
         android:id="@+id/signUpButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70sp"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="#DD2E2E"
         android:onClick="onSignUpButtonClick"
         android:text="@string/sign_up"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.428"
         app:layout_constraintWidth_percent="0.7" />
 
     <ProgressBar

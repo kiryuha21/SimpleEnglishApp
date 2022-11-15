@@ -16,6 +16,15 @@
         android:theme="@style/Theme.Simple_english"
         tools:targetApi="31">
         <activity
+            android:name=".PasswordReset"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Learning"
             android:exported="false"
             android:launchMode="singleInstance"
