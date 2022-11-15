@@ -19,10 +19,12 @@ import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
+import java.sql.Timestamp
 
 class Memorising : Fragment() {
     private lateinit var fragBinding: FragmentMemorisingBinding
@@ -70,17 +72,30 @@ class Memorising : Fragment() {
         }
 
         fragBinding.memoDoneButton.setOnClickListener {
-            taskModel.currentTask.value!!.content.nextNoticeIn = setNextNotice(taskModel.currentTask.value!!.content.nextNoticeIn!!)
+            taskModel.currentTask.value!!.content.nextNoticeIn = setNextNotice(
+                if (correctAnswer)
+                    taskModel.currentTask.value!!.content.nextNoticeIn!!
+                else
+                    "'0 seconds'"
+            )
+            taskModel.currentTask.value!!.content.memLastUpdate = Timestamp(System.currentTimeMillis())
+
             val jsonContent = Json.encodeToString(taskModel.currentTask.value!!.content)
             val body = mapOf("id" to taskModel.currentTask.value!!.content.id.toString(), "stringTask" to jsonContent)
+
             setLoadState(isActive = true, withLoad = true)
             lifecycleScope.launch(Dispatchers.IO) {
-                requests.sendAsyncRequest("update_task_content_by_id", body, HttpMethods.POST)
+                requests.sendAsyncRequest("/update_task_content_by_id", body, HttpMethods.PUT)
             }.invokeOnCompletion {
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, ChooseTask())
-                    .commit()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val jsonTasks =  requests.sendAsyncRequest("/get_noticeable_headers", mapOf("id" to taskModel.user.value!!.id.toString()), HttpMethods.POST)
+                    taskModel.tasks.postValue(Json.decodeFromString(jsonTasks))
+                }.invokeOnCompletion {
+                    requireActivity().supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, ChooseTask())
+                        .commit()
+                }
             }
         }
     }
@@ -106,8 +121,6 @@ class Memorising : Fragment() {
         readingHeaderPoints.text = "${taskModel.currentTask.value!!.pointsXP} XP"
         readingHeaderDescription.text = taskModel.currentTask.value!!.description
         readingHeaderCard.transitionName = taskModel.transitionName.value
-
-        //fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
     }
 
     private fun fillContent() {

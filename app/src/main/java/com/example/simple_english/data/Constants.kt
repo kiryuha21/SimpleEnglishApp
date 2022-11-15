@@ -91,7 +91,7 @@ data class TaskContent(val id: Int?,
                        val correctVariants: Array<String?>?,
                        val questions: Array<String?>?,
                        @Serializable(with = TimestampSerializer::class)
-                       val memLastUpdate: Timestamp?,
+                       var memLastUpdate: Timestamp?,
                        var nextNoticeIn : String?,
                        val musicURL: String?)
 
