@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.simple_english.data.*
-import com.example.simple_english.databinding.ActivityMainBinding
+import com.example.simple_english.databinding.ActivitySignInBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.hideKeyboard
 import com.example.simple_english.lib.setEditOnChange
@@ -23,7 +23,7 @@ import kotlinx.serialization.json.Json
 
 class SignIn : AppCompatActivity() {
     private val requests = HttpsRequests()
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivitySignInBinding
     private lateinit var user : User
     private var doubleBackToExitPressedOnce = false
 
@@ -74,7 +74,7 @@ class SignIn : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (requests.isNetworkAvailable(this)) {
@@ -124,6 +124,11 @@ class SignIn : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun onResetPasswordClicked(view: View) {
+        val resetIntent = Intent(this, PasswordReset::class.java)
+        startActivity(resetIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
     private suspend fun authHandling(): String {

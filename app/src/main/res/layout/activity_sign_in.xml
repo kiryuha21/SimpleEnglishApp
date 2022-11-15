@@ -103,6 +103,7 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onResetPasswordClicked"
         android:text="@string/forgot_password"
         android:textColor="#9E0303"
         app:layout_constraintBottom_toBottomOf="parent"
