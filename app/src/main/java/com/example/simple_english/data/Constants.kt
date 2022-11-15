@@ -79,6 +79,8 @@ object TimestampSerializer : KSerializer<Timestamp> {
 data class User(val id: Int,
                 var username : String,
                 var password : String,
+                var secretWord : String,
+                var secretWordType: String,
                 var XP : Int,
                 var completedTasks : IntArray,
                 var startedMemories : IntArray,

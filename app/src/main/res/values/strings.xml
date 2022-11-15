@@ -15,7 +15,8 @@
     <string name="reg_login_example">example@gmail.com</string>
     <string name="reg_password_text">Пароль</string>
     <string name="reg_password_rep_text">Повторите пароль</string>
-    <string name="english_level_text">Выберите ваш уровень английского</string>
+    <string name="secret_word_text">Выберите секретное слово для восстаноления пароля</string>
+    <string name="secret_word_hint">Секретное слово</string>
     <string name="wrong_password">Неправильный пароль</string>
     <string name="no_such_user">Несуществующий пользователь</string>
     <string name="wrong_login_format">Недопустимый логин!</string>
@@ -74,11 +75,12 @@
     <string name="usersStatistics">Статистика по всем пользователям</string>
     <string name="developers_desc">Серверная и клиентская часть - koptelevka@student.bmstu.ru\nДизайн и бизнес-логика - kuznetsovie@student.bmstu.ru</string>
 
-    <string-array name="english_levels">
-        <item>Intermediate</item>
-        <item>Upper-intermediate</item>
-        <item>Beginner</item>
-        <item>Amateur</item>
+    <string-array name="secret_types">
+        <item>Кличка вашего питомца</item>
+        <item>Марка вашей машины</item>
+        <item>Ваше счастливое число</item>
+        <item>Ваш знак зодиака</item>
+        <item>Другое</item>
     </string-array>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

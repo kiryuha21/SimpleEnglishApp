@@ -94,9 +94,12 @@ class SignUp : AppCompatActivity() {
             return Constants.badPattern
         }
 
+        val secretWord = binding.userSecret.text.toString()
+        val secretWordType = binding.spinner.selectedItem.toString()
+
         val response = requests.sendAsyncRequest(
             "/add_user",
-            mapOf("username" to usernameString, "password" to passwordString),
+            mapOf("username" to usernameString, "password" to passwordString, "secretWord" to secretWord, "secretWordType" to secretWordType),
             HttpMethods.POST
         )
         if (response.isEmpty()) {
