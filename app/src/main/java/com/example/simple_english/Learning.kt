@@ -53,7 +53,7 @@ class Learning : AppCompatActivity() {
 
         when (learningType) {
             Constants.translator -> showTranslator()
-            // Constants.statistics -> showStatistics()
+            Constants.statistics -> showStatistics()
             else -> setTasks(learningType)
         }
     }
@@ -62,6 +62,13 @@ class Learning : AppCompatActivity() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainer, Translator())
+            .commit()
+    }
+
+    private fun showStatistics() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainer, Statistics())
             .commit()
     }
 
@@ -141,6 +148,13 @@ class Learning : AppCompatActivity() {
                     taskModel.currentType.value = Constants.translator
                     drawer.closeDrawer(GravityCompat.START)
                     showTranslator()
+                }
+                R.id.statistics -> {
+                    learningType = Constants.statistics
+                    binding.learningTypeTV.text = learningType
+                    taskModel.currentType.value = Constants.translator
+                    drawer.closeDrawer(GravityCompat.START)
+                    showStatistics()
                 }
                 else -> Toast.makeText(this@Learning, "something pressed", Toast.LENGTH_SHORT).show()
             }

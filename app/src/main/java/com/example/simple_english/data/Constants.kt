@@ -52,6 +52,9 @@ object Constants {
     // Insert Words
     const val correctAnswer = "<font color=green>%s</font>"
     const val wrongAnswer = "<font color=red>%s</font>"
+
+    // Memorising
+    const val memoFinished = "Finished"
 }
 
 enum class HttpMethods {
@@ -79,7 +82,7 @@ data class User(val id: Int,
                 var XP : Int,
                 var completedTasks : IntArray,
                 var startedMemories : IntArray,
-                var name : String? = null) : Serial
+                var name : String?) : Serial
 
 @Serializable
 data class TaskContent(val id: Int?,
@@ -88,8 +91,8 @@ data class TaskContent(val id: Int?,
                        val correctVariants: Array<String?>?,
                        val questions: Array<String?>?,
                        @Serializable(with = TimestampSerializer::class)
-                       val memLastUpdate: Timestamp?,
-                       val nextNoticeIn : String?,
+                       var memLastUpdate: Timestamp?,
+                       var nextNoticeIn : String?,
                        val musicURL: String?)
 
 @Serializable

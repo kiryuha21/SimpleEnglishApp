@@ -66,4 +66,7 @@ dependencies {
 
     // picture loading
     implementation 'io.coil-kt:coil:2.2.2'
+
+    // bar charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -122,20 +123,29 @@ class ChooseTask : Fragment() {
 
     private fun alertConfirmPressed(text: String) {
         fragBinding.memoProgress.visibility = View.VISIBLE
-        var response = ""
+
+        lateinit var response: String
+        lateinit var newHeader: TaskHeader
+
         lifecycleScope.launch(Dispatchers.IO) {
             val header = formHeader(text)
             val jsonHeader = Json.encodeToString(header)
             response = requests.sendAsyncRequest("/add_task_header", mapOf("stringTaskHeader" to jsonHeader), HttpMethods.POST)
         }.invokeOnCompletion {
-            val newHeader = Json.decodeFromString<TaskHeader>(response)
+            newHeader = Json.decodeFromString(response)
             taskModel.user.value!!.startedMemories += newHeader.id!!
             taskModel.user.value!!.password = ""
             val jsonUser = Json.encodeToString(taskModel.user.value!!)
             lifecycleScope.launch(Dispatchers.IO) {
                 requests.sendAsyncRequest("/update_user", mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser), HttpMethods.PUT)
             }.invokeOnCompletion {
+                taskModel.tasks.value!!.add(newHeader)
+
+                val recycle = fragBinding.optionsRecycle
+
                 requireActivity().runOnUiThread {
+                    recycle.adapter!!.notifyItemInserted(recycle.size)
+                    recycle.scrollToPosition(recycle.adapter!!.itemCount - 1)
                     fragBinding.memoProgress.visibility = View.GONE
                 }
             }
@@ -161,7 +171,7 @@ class ChooseTask : Fragment() {
                 correctVariants = null,
                 questions = null,
                 memLastUpdate = Timestamp(System.currentTimeMillis()),
-                nextNoticeIn = "'30 minutes'",
+                nextNoticeIn = "'0 seconds'",
                 musicURL = null
             )
         )

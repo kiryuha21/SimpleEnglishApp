@@ -29,12 +29,13 @@
                 tools:src="@tools:sample/avatars" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/memoWordEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/enter_translation"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:minHeight="48dp" />
 
             <Button
                 android:id="@+id/memoReadyButton"
