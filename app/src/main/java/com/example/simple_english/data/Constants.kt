@@ -84,7 +84,7 @@ data class User(val id: Int,
                 var XP : Int,
                 var completedTasks : IntArray,
                 var startedMemories : IntArray,
-                var name : String?) : Serial
+                var name : String? = null) : Serial
 
 @Serializable
 data class TaskContent(val id: Int?,
