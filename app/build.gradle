@@ -68,5 +68,5 @@ dependencies {
     implementation 'io.coil-kt:coil:2.2.2'
 
     // bar charts
-    implementation 'com.github.AnyChart:AnyChart-Android:1.1.4'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

@@ -7,19 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.anychart.AnyChart
-import com.anychart.chart.common.dataentry.DataEntry
-import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.core.Chart
-import com.anychart.enums.Anchor
-import com.anychart.enums.HoverMode
-import com.anychart.enums.Position
-import com.anychart.enums.TooltipPositionMode
 import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.data.User
 import com.example.simple_english.databinding.FragmentStatisticsBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,9 +33,8 @@ class Statistics : Fragment() {
     private val taskModel: TaskModel by activityViewModels()
     private val requests = HttpsRequests()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val xAxisMemo = arrayListOf("Впервые", "20 минут", "12 часов", "32 часа", "5 дней", "Выполнено")
+    private val xAxisUsers = ArrayList<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,28 +42,54 @@ class Statistics : Fragment() {
     ): View {
         fragBinding = FragmentStatisticsBinding.inflate(inflater)
 
-        lateinit var memoChart: Chart
+        lateinit var memoChartData: BarData
         lifecycleScope.launch(Dispatchers.IO) {
-            memoChart = setMemoStat()
+            memoChartData = setMemoStat()
         }.invokeOnCompletion {
+            val memoChart = fragBinding.memorisingProgress
+
+            configChart(memoChart, IndexAxisValueFormatter(xAxisMemo))
+            memoChart.data = memoChartData
+
             requireActivity().runOnUiThread {
-                fragBinding.memorisingProgress.setChart(memoChart)
+                memoChart.animateY(1500, Easing.EaseInOutQuad)
             }
+
+            memoChart.invalidate()
         }
 
-//        lateinit var usersChart: Chart
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            usersChart = setUsersXpStat()
-//        }.invokeOnCompletion {
-//            fragBinding.usersXp.setChart(usersChart)
-//        }
+        lateinit var usersChartData: BarData
+        lifecycleScope.launch(Dispatchers.IO) {
+            usersChartData = setUsersXpStat()
+        }.invokeOnCompletion {
+            val usersChart = fragBinding.usersXp
+
+            configChart(usersChart, IndexAxisValueFormatter(xAxisUsers))
+            usersChart.data = usersChartData
+
+            requireActivity().runOnUiThread {
+                usersChart.animateY(1500, Easing.EaseInOutQuad)
+            }
+
+            usersChart.invalidate()
+        }
 
         return fragBinding.root
     }
 
-    private suspend fun setUsersXpStat(): Chart {
-        val cartesian = AnyChart.column()
+    private fun configChart(chart: BarChart, formatter: IndexAxisValueFormatter) {
+        chart.xAxis.apply {
+            valueFormatter = formatter
+            granularity = 1f
+            position = XAxis.XAxisPosition.BOTTOM
+            setDrawGridLines(false)
+        }
+        chart.axisLeft.axisMinimum = 0f
+        chart.legend.isEnabled = false
+        chart.description.isEnabled = false
+    }
 
+    private suspend fun setUsersXpStat(): BarData {
         val rawUserStat = withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             requests.sendAsyncRequest(
                 "/get_all_users",
@@ -73,39 +98,23 @@ class Statistics : Fragment() {
             )
         }
 
-        val data = ArrayList<DataEntry>()
-        val primaryArray: ArrayList<User> = Json.decodeFromString(rawUserStat)
-        for (i in primaryArray) {
-            data.add(ValueDataEntry(i.name ?: i.username, i.XP))
+        val entriesArray = ArrayList<BarEntry>()
+        val primaryArray: ArrayList<User> = Json.decodeFromString(rawUserStat.replace("xp", "XP"))
+        for (i in primaryArray.indices) {
+            xAxisUsers.add(primaryArray[i].name ?: primaryArray[i].username)
+            entriesArray.add(BarEntry(i.toFloat(), primaryArray[i].XP.toFloat()))
         }
 
-        val column = cartesian.column(data)
-        column.tooltip()
-            .titleFormat("{%X}")
-            .position(Position.CENTER_BOTTOM)
-            .anchor(Anchor.CENTER_BOTTOM)
-            .offsetX(0)
-            .offsetY(5)
+        val dataset = BarDataSet(entriesArray, "Опыт пользователей")
+        dataset.colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
 
-        cartesian.animation(true)
-        cartesian.title("XP пользователей")
+        val data = BarData(dataset)
+        data.setValueTextSize(8f)
 
-        cartesian.yScale().minimum(0.0)
-
-        cartesian.yAxis(0).labels().format("\${%Value}{groupsSeparator: }")
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
-        cartesian.interactivity().hoverMode(HoverMode.BY_X)
-
-        cartesian.xAxis(0).title("Имя")
-        cartesian.yAxis(0).title("XP")
-
-        return cartesian
+        return data
     }
 
-    private suspend fun setMemoStat(): Chart {
-        val cartesian = AnyChart.column()
-
+    private suspend fun setMemoStat(): BarData {
         val rawMemoStat = withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
                 requests.sendAsyncRequest(
                     "/user_memorising",
@@ -114,38 +123,24 @@ class Statistics : Fragment() {
                 )
             }
 
-        val data = ArrayList<DataEntry>()
+        val sortMap = mutableMapOf("'0 seconds'" to 0f, "'20 minutes'" to 0f, "'12 hours'" to 0f, "'32 hours'" to 0f, "'5 days'" to 0f, "Finished" to 0f)
+        val entriesArray = ArrayList<BarEntry>()
         val primaryArray = Json.parseToJsonElement(rawMemoStat).jsonArray
-        for (i in primaryArray) {
-            val secondaryArray = i.jsonArray
-            val key = secondaryArray[0].toString()
-            val value = secondaryArray[1].toString().toInt()
-            println("$key $value")
-            data.add(ValueDataEntry(key, value))
+        for (i in primaryArray.indices) {
+            val secondaryArray = primaryArray[i].jsonArray
+            val key = secondaryArray[0].toString().trim('"')
+            val value = secondaryArray[1].toString().toFloat()
+            sortMap[key] = value
         }
+        sortMap.onEachIndexed { index, entry -> entriesArray.add(BarEntry(index.toFloat(), entry.value)) }
 
-        val column = cartesian.column(data)
-        column.tooltip()
-            .titleFormat("{%X}")
-            .position(Position.CENTER_BOTTOM)
-            .anchor(Anchor.CENTER_BOTTOM)
-            .offsetX(0)
-            .offsetY(5)
+        val dataset = BarDataSet(entriesArray, "Статус запоминания")
+        dataset.colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
 
-        cartesian.animation(true)
-        cartesian.title("Статус запоминания")
+        val data = BarData(dataset)
+        data.setValueTextSize(8f)
 
-        cartesian.yScale().minimum(0.0)
-
-        cartesian.yAxis(0).labels().format("\${%Value}{groupsSeparator: }")
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
-        cartesian.interactivity().hoverMode(HoverMode.BY_X)
-
-        cartesian.xAxis(0).title("Статус")
-        cartesian.yAxis(0).title("Количество")
-
-        return cartesian
+        return data
     }
 
     companion object {

@@ -101,11 +101,10 @@ class Memorising : Fragment() {
     }
 
     private fun setNextNotice(currentNotice: String): String = when(currentNotice) {
-        "'0 seconds'" -> "'30 minutes'"
-        "'30 minutes'" -> "'1 day'"
-        "'1 day'" -> "'7 days'"
-        "'7 days'" -> "'1 month'"
-        "'1 month'" -> "'6 months'"
+        "'0 seconds'" -> "'20 minutes'"
+        "'20 minutes'" -> "'12 hours'"
+        "'12 hours'" -> "'32 hours'"
+        "'32 hours'" -> "'5 days'"
         else -> Constants.memoFinished
     }
 
