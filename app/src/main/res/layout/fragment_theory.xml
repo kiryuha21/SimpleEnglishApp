@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/menu_background"
     tools:context=".Theory">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello theory fragment" />
+        android:layout_margin="10dp">
+
+        <ProgressBar
+            android:id="@+id/taskLoadingProgress"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/theory_done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:text="@string/done" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/textContentCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            app:cardUseCompatPadding="true"
+            app:contentPaddingLeft="5dp"
+            app:contentPaddingRight="5dp">
+
+            <TextView
+                android:id="@+id/textContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="TextView" />
+        </androidx.cardview.widget.CardView>
+
+        <include
+            android:id="@+id/theory_include"
+            layout="@layout/common_card_for_fragments" />
+    </FrameLayout>
 
 </FrameLayout>
