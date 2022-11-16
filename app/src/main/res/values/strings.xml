@@ -14,12 +14,15 @@
     <string name="reg_login_text">Логин(e-mail)</string>
     <string name="reg_login_example">example@gmail.com</string>
     <string name="reg_password_text">Пароль</string>
+    <string name="check_account">Найти аккаунт</string>
     <string name="reg_password_rep_text">Повторите пароль</string>
     <string name="secret_word_text">Выберите секретное слово для восстаноления пароля</string>
     <string name="secret_word_hint">Секретное слово</string>
     <string name="wrong_password">Неправильный пароль</string>
     <string name="no_such_user">Несуществующий пользователь</string>
     <string name="wrong_login_format">Недопустимый логин!</string>
+    <string name="your_secret_type">Ваш тип секретного слова</string>
+    <string name="your_secret_type_placeholder">Ваш тип секретного слова - %1$s</string>
     <string name="user_exists">Пользователь с таким логином уже существует!</string>
     <string name="different_passwords">Пароли должны совпадать!</string>
     <string name="uk_flag_description">UK flag</string>
@@ -30,6 +33,7 @@
     <string name="statistics_icon_text">Статистика</string>
     <string name="memoring_icon_text">Запоминание</string>
     <string name="settings_title">Настройки</string>
+    <string name="xp_progress">Прогресс: %1$d XP</string>
     <string name="contact_developers">Связь с разработчиками</string>
     <string name="save_changes">Сохранить&#10;изменения</string>
     <string name="log_out">Выйти</string>
@@ -54,6 +58,8 @@
     <string name="rewind">Перемотать на начало</string>
     <string name="insert">Вставить</string>
     <string name="ready">Готово</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="save">Сохранить</string>
     <string name="add_word">Добавить слово</string>
     <string name="russian">Русский</string>
     <string name="english">Английский</string>

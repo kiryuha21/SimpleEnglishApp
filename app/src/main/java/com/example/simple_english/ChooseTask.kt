@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
@@ -122,6 +123,11 @@ class ChooseTask : Fragment() {
     }
 
     private fun alertConfirmPressed(text: String) {
+        if (text.isEmpty()) {
+            Toast.makeText(context, "Слово не может быть пустым!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         fragBinding.memoProgress.visibility = View.VISIBLE
 
         lateinit var response: String
