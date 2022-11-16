@@ -67,6 +67,8 @@ class Settings : AppCompatActivity() {
         val navHeader = binding.navigation.commonNavigation.getHeaderView(0)
         val userGreetTV = navHeader.findViewById<TextView>(R.id.nav_header_greeting)
         userGreetTV.text = String.format(getText(R.string.nav_header_greeting).toString(), user.name ?: "Гость")
+        val userXpTV = navHeader.findViewById<TextView>(R.id.nav_header_xp)
+        userXpTV.text = String.format(getText(R.string.xp_progress).toString(), user.XP)
     }
 
     fun onSaveButtonClick(view : View) {

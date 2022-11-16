@@ -33,6 +33,7 @@
     <string name="statistics_icon_text">Статистика</string>
     <string name="memoring_icon_text">Запоминание</string>
     <string name="settings_title">Настройки</string>
+    <string name="xp_progress">Прогресс: %1$d XP</string>
     <string name="contact_developers">Связь с разработчиками</string>
     <string name="save_changes">Сохранить&#10;изменения</string>
     <string name="log_out">Выйти</string>
