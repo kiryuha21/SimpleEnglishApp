@@ -46,6 +46,11 @@ class Learning : AppCompatActivity() {
         setNavigationActions()
         setNavHeaderText()
 
+        taskModel.user.observe(this) {
+            user = it
+            setNavHeaderText()
+        }
+
         if (!requests.isNetworkAvailable(this)) {
             Toast.makeText(this, getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
             return
