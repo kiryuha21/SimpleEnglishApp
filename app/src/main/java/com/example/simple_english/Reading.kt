@@ -15,10 +15,9 @@ import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.FragmentReadingBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
+import com.example.simple_english.lib.getPostBodyForUserXpUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class Reading : Fragment() {
     private lateinit var fragBinding: FragmentReadingBinding
@@ -60,12 +59,8 @@ class Reading : Fragment() {
             return
         }
 
-        taskModel.user.value!!.XP += taskModel.currentTask.value!!.pointsXP
-        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id!!
-        taskModel.user.value!!.password = ""
         fragBinding.taskLoadingProgress.visibility = View.VISIBLE
-        val jsonUser = Json.encodeToString(taskModel.user.value!!)
-        val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
+        val postBody = getPostBodyForUserXpUpdate(taskModel.user.value!!, taskModel.currentTask.value!!.pointsXP, taskModel.currentTask.value!!.id!!)
         lifecycleScope.launch(Dispatchers.IO) {
             requests.sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
         }.invokeOnCompletion {

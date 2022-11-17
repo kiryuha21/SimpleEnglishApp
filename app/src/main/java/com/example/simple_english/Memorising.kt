@@ -17,6 +17,7 @@ import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.FragmentMemorisingBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
+import com.example.simple_english.lib.getPostBodyForUserXpUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
@@ -79,6 +80,13 @@ class Memorising : Fragment() {
                     "'0 seconds'"
             )
             taskModel.currentTask.value!!.content.memLastUpdate = Timestamp(System.currentTimeMillis())
+
+            if (taskModel.currentTask.value!!.content.nextNoticeIn == Constants.memoFinished) {
+                val postBody = getPostBodyForUserXpUpdate(taskModel.user.value!!, taskModel.currentTask.value!!.pointsXP, null)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    requests.sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
+                }
+            }
 
             val jsonContent = Json.encodeToString(taskModel.currentTask.value!!.content)
             val body = mapOf("id" to taskModel.currentTask.value!!.content.id.toString(), "stringTask" to jsonContent)

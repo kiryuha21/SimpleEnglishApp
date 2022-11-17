@@ -19,11 +19,9 @@ import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.FragmentAudioBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
+import com.example.simple_english.lib.getPostBodyForUserXpUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import java.io.FileNotFoundException
 
 class Audio : Fragment() {
     private lateinit var fragBinding: FragmentAudioBinding
@@ -139,12 +137,10 @@ class Audio : Fragment() {
 
         fragBinding.audioDoneButton.setOnClickListener {
             player.release()
-            taskModel.user.value!!.XP += (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
-            taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id!!
-            taskModel.user.value!!.password = ""
             fragBinding.audioLoadingProgress.visibility = View.VISIBLE
-            val jsonUser = Json.encodeToString(taskModel.user.value!!)
-            val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
+
+            val xpAppend = (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
+            val postBody = getPostBodyForUserXpUpdate(taskModel.user.value!!, xpAppend, taskModel.currentTask.value!!.id!!)
             lifecycleScope.launch(Dispatchers.IO) {
                 HttpsRequests().sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
             }.invokeOnCompletion {
@@ -179,7 +175,12 @@ class Audio : Fragment() {
             fragBinding.audioCurrentTask.text = taskModel.currentTask.value!!.content.questions!![choiceCounter]
         }
 
-        val toastText = if (rightOption == chosenText) "Правильный ответ" else "неправильный ответ"
+        val toastText = if (rightOption == chosenText) {
+            ++correctAnswers
+            "Правильный ответ"
+        } else {
+            "неправильный ответ"
+        }
         Toast.makeText(currentActivity, toastText, Toast.LENGTH_SHORT).show()
     }
 

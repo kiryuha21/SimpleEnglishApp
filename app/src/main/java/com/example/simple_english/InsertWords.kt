@@ -17,10 +17,9 @@ import com.example.simple_english.data.HttpMethods
 import com.example.simple_english.databinding.FragmentInsertWordsBinding
 import com.example.simple_english.lib.HttpsRequests
 import com.example.simple_english.lib.TaskModel
+import com.example.simple_english.lib.getPostBodyForUserXpUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class InsertWords : Fragment() {
     private lateinit var fragBinding: FragmentInsertWordsBinding
@@ -70,13 +69,10 @@ class InsertWords : Fragment() {
             Toast.makeText(requireActivity(), getText(R.string.no_connection), Toast.LENGTH_SHORT).show()
             return
         }
-
-        taskModel.user.value!!.XP += (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
-        taskModel.user.value!!.completedTasks += taskModel.currentTask.value!!.id!!
-        taskModel.user.value!!.password = ""
         fragBinding.insertWordsLoadingProgress.visibility = View.VISIBLE
-        val jsonUser = Json.encodeToString(taskModel.user.value!!)
-        val postBody = mapOf("id" to taskModel.user.value!!.id.toString(), "stringUser" to jsonUser)
+
+        val xpAppend = (taskModel.currentTask.value!!.pointsXP * (correctAnswers.toFloat() / tasksCount)).toInt()
+        val postBody = getPostBodyForUserXpUpdate(taskModel.user.value!!, xpAppend, taskModel.currentTask.value!!.id!!)
         lifecycleScope.launch(Dispatchers.IO) {
             requests.sendAsyncRequest("/update_user", postBody, HttpMethods.PUT)
         }.invokeOnCompletion {

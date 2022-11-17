@@ -54,7 +54,7 @@ object Constants {
     const val wrongAnswer = "<font color=red>%s</font>"
 
     // Memorising
-    const val memoFinished = "Finished"
+    const val memoFinished = "'1000 years'"
 }
 
 enum class HttpMethods {
