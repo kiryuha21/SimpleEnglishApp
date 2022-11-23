@@ -73,12 +73,11 @@ class Memorising : Fragment() {
         }
 
         fragBinding.memoDoneButton.setOnClickListener {
-            taskModel.currentTask.value!!.content.nextNoticeIn = setNextNotice(
+            taskModel.currentTask.value!!.content.nextNoticeIn =
                 if (correctAnswer)
-                    taskModel.currentTask.value!!.content.nextNoticeIn!!
+                    setNextNotice(taskModel.currentTask.value!!.content.nextNoticeIn!!)
                 else
                     "'0 seconds'"
-            )
             taskModel.currentTask.value!!.content.memLastUpdate = Timestamp(System.currentTimeMillis())
 
             if (taskModel.currentTask.value!!.content.nextNoticeIn == Constants.memoFinished) {
