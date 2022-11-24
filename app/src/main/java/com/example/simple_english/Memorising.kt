@@ -32,6 +32,7 @@ class Memorising : Fragment() {
     private val requests = HttpsRequests()
     private val taskModel: TaskModel by activityViewModels()
     private val searchBase = "https://api.openverse.engineering/v1/images?q="
+    private val openverseToken = "vNAy2rYcBchdeDemvBQ1wN4WeIoKWw"
     private var correctAnswer = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,7 +131,7 @@ class Memorising : Fragment() {
     }
 
     private fun fillContent() {
-        val headers = mapOf("Authorization" to "Bearer vZufVHly8ZufjPl0LKbX2Og8KbBauG")
+        val headers = mapOf("Authorization" to "Bearer $openverseToken")
         val url = searchBase + taskModel.currentTask.value!!.content.taskText
         setLoadState(isActive = true, withLoad = true)
 
