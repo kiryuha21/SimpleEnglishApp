@@ -17,6 +17,7 @@ fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
+// Hides error of TextInputLayout on editing
 fun setEditOnChange(editText: TextInputEditText) {
     editText.apply {
         addTextChangedListener {
@@ -25,6 +26,7 @@ fun setEditOnChange(editText: TextInputEditText) {
     }
 }
 
+// forms map for POST request with updated XP for user
 fun getPostBodyForUserXpUpdate(user: User, appendedXP: Int, completedTask: Int?): Map<String, String> {
     user.XP += appendedXP
     user.password = ""

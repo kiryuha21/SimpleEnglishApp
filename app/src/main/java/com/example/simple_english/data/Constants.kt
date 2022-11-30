@@ -63,6 +63,7 @@ enum class HttpMethods {
     PUT
 }
 
+// Serializer for timestamps
 object TimestampSerializer : KSerializer<Timestamp> {
     override val descriptor = PrimitiveSerialDescriptor("Timestamp", PrimitiveKind.STRING)
 

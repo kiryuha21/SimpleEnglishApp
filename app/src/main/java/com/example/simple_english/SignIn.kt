@@ -27,6 +27,7 @@ class SignIn : AppCompatActivity() {
     private lateinit var user : User
     private var doubleBackToExitPressedOnce = false
 
+    // callback for returning from registration activity
     private var registrationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
@@ -131,6 +132,7 @@ class SignIn : AppCompatActivity() {
         startActivity(resetIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
+    // forms requests for authentication, sends it and returns response
     private suspend fun authHandling(): String {
         val login = binding.login.text.toString()
         val password = binding.password.text.toString()

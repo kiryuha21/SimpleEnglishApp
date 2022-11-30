@@ -49,6 +49,7 @@ class HttpsRequests {
         }
     }
 
+    // Sends request with given params
     suspend fun sendAsyncRequest(
         option: String,
         body: Map<String, String>,
@@ -74,6 +75,7 @@ class HttpsRequests {
         return result
     }
 
+    // sends async GET request to turn on server
     fun sendEmptyRequest() {
         val request = Request.Builder().url(activeUrlBase).build()
 
@@ -92,6 +94,7 @@ class HttpsRequests {
         })
     }
 
+    // forms direct URL for music downloading
     suspend fun getMusicFileUrl(publicKey: String): String {
         val result: String
         val finalUrl = musicBaseUrl + "public_key=${URLEncoder.encode(publicKey, "utf-8")}"
@@ -109,6 +112,7 @@ class HttpsRequests {
         return result
     }
 
+    // Sends GET request with given headers
     suspend fun getWithHeaders(url: String, headers: Map<String, String>): JsonElement {
         val headerBuilder = Headers.Builder()
         for ((key, value) in headers) {
@@ -125,6 +129,7 @@ class HttpsRequests {
         return result
     }
 
+    // Forms URL query from given map
     fun formQuery(map: Map<String, String>): String {
         return map.entries.stream()
             .map { (k, v) ->

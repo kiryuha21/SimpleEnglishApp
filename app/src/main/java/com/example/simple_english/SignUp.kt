@@ -77,11 +77,13 @@ class SignUp : AppCompatActivity() {
         }
     }
 
+    // Checks if username is valid with regex
     private fun validUsername(text: String): Boolean {
         val regex = Regex(".+@.+\\..+")
         return text.matches(regex)
     }
 
+    // forms request to sign up, sends it and returns response
     private suspend fun signUpHandling(): String {
         val passwordRepeatString = binding.userPasswordRepeat.text.toString()
         val passwordString = binding.userPassword.text.toString()

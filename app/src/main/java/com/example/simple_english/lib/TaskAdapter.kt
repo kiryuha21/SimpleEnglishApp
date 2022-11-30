@@ -11,6 +11,7 @@ import com.example.simple_english.data.Constants
 import com.example.simple_english.data.TaskHeader
 import com.example.simple_english.databinding.TaskItemBinding
 
+// Adapter for tasks
 class TaskAdapter(private val clickListener: (View) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskHolder>() {
     var tasks = ArrayList<TaskHeader>()
@@ -43,7 +44,7 @@ class TaskAdapter(private val clickListener: (View) -> Unit) :
             )
             taskNameTV.text = task.description
             when (task.pointsXP) {
-                Constants.doneTask -> {
+                Constants.doneTask -> {  // Special background and unclickability for completed tasks
                     pointsTV.text = "Выполнено"
                     taskCard.setCardBackgroundColor(Color.parseColor(Constants.doneColor))
                 }

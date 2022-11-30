@@ -44,6 +44,7 @@ class MainMenu : AppCompatActivity() {
         setNavHeaderText()
     }
 
+    // sets text for navigation header
     private fun setNavHeaderText() {
         val navHeader = binding.navigation.commonNavigation.getHeaderView(0)
         val userGreetTV = navHeader.findViewById<TextView>(R.id.nav_header_greeting)
@@ -52,6 +53,7 @@ class MainMenu : AppCompatActivity() {
         userXpTV.text = String.format(getText(R.string.xp_progress).toString(), user.XP)
     }
 
+    // common function to start education activity
     private fun learningActivityStart(learningType: String) {
         val learningIntent = Intent(this, Learning::class.java)
         learningIntent.putExtra("learning_type", learningType)

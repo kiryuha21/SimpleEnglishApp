@@ -16,7 +16,7 @@ import me.bush.translator.Translator as BushTranslator
 class Translator : Fragment() {
     private lateinit var fragBinding: FragmentTranslatorBinding
     private var currentSourceLanguage = Language.RUSSIAN
-    private val translator = BushTranslator()
+    private val translator = BushTranslator()  // Translator API
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +28,7 @@ class Translator : Fragment() {
     ): View {
         fragBinding = FragmentTranslatorBinding.inflate(inflater)
 
+        // animation for arrows of language translate direction
         val rotateAnim = RotateAnimation(
             0.0f, 180f,
             RotateAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -36,6 +37,7 @@ class Translator : Fragment() {
         rotateAnim.duration = 1000
         rotateAnim.fillAfter = true
 
+        // change language click listener
         fragBinding.changeLanguages.setOnClickListener {
            it.startAnimation(rotateAnim)
 
@@ -65,6 +67,7 @@ class Translator : Fragment() {
         return fragBinding.root
     }
 
+    // translates text and writes result in result field
     private fun translateText() {
         val sourceText = fragBinding.textToTranslate.text.toString()
         if (sourceText.isEmpty()) {

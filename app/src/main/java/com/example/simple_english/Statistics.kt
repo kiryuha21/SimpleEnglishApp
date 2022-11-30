@@ -33,6 +33,7 @@ class Statistics : Fragment() {
     private val taskModel: TaskModel by activityViewModels()
     private val requests = HttpsRequests()
 
+    // x-axis labels for charts
     private val xAxisMemo = arrayListOf("Впервые", "20 минут", "12 часов", "32 часа", "5 дней", "Выполнено")
     private val xAxisUsers = ArrayList<String>()
 
@@ -42,6 +43,7 @@ class Statistics : Fragment() {
     ): View {
         fragBinding = FragmentStatisticsBinding.inflate(inflater)
 
+        // async loading of first chart
         lateinit var memoChartData: BarData
         lifecycleScope.launch(Dispatchers.IO) {
             memoChartData = setMemoStat()
@@ -58,6 +60,7 @@ class Statistics : Fragment() {
             memoChart.invalidate()
         }
 
+        // async loading of second chart
         lateinit var usersChartData: BarData
         lifecycleScope.launch(Dispatchers.IO) {
             usersChartData = setUsersXpStat()
@@ -77,6 +80,7 @@ class Statistics : Fragment() {
         return fragBinding.root
     }
 
+    // configuration of chart visual settings
     private fun configChart(chart: BarChart, formatter: IndexAxisValueFormatter) {
         chart.xAxis.apply {
             valueFormatter = formatter
@@ -89,6 +93,7 @@ class Statistics : Fragment() {
         chart.description.isEnabled = false
     }
 
+    // get users xp and returns bar data for chart
     private suspend fun setUsersXpStat(): BarData {
         val rawUserStat = withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             requests.sendAsyncRequest(
@@ -114,6 +119,7 @@ class Statistics : Fragment() {
         return data
     }
 
+    // gets memorising data and return bar data for chart
     private suspend fun setMemoStat(): BarData {
         val rawMemoStat = withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
                 requests.sendAsyncRequest(

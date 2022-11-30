@@ -59,8 +59,8 @@ class Audio : Fragment() {
             .Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .build())
-        var finalURL = ""
 
+        var finalURL = ""
         if (!requests.isNetworkAvailable(currentActivity)) {
             Toast.makeText(currentActivity, getText(R.string.connect_and_reload), Toast.LENGTH_SHORT).show()
             setLoadState(isActive = true, withLoad = false)
@@ -95,6 +95,7 @@ class Audio : Fragment() {
         return fragBinding.root
     }
 
+    // show loading on screen
     private fun setLoadState(isActive: Boolean, withLoad: Boolean) = with(fragBinding) {
         audioLoadingProgress.visibility = if (isActive && withLoad) {
             View.VISIBLE

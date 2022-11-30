@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">simple_english</string>
+    <string name="app_name">Простой английский</string>
     <string name="sign_in">Удобное изучение английского языка</string>
-    <string name="app_title">Simple English</string>
+    <string name="app_title">Простой английский</string>
     <string name="login">Логин</string>
     <string name="login_hint">Ваш логин</string>
     <string name="password_hint">Ваш пароль</string>

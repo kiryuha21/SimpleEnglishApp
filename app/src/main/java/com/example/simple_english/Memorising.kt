@@ -108,6 +108,7 @@ class Memorising : Fragment() {
         }
     }
 
+    // configures time for next notice based on current notice time
     private fun setNextNotice(currentNotice: String): String = when(currentNotice) {
         "'0 seconds'" -> "'20 minutes'"
         "'20 minutes'" -> "'12 hours'"
@@ -130,6 +131,7 @@ class Memorising : Fragment() {
         readingHeaderCard.transitionName = taskModel.transitionName.value
     }
 
+    // gets URL to load picture or sets it in error state
     private fun fillContent() {
         val headers = mapOf("Authorization" to "Bearer $openverseToken")
         val url = searchBase + taskModel.currentTask.value!!.content.taskText

@@ -105,6 +105,7 @@ class Settings : AppCompatActivity() {
         }
     }
 
+    // forms request to update user and returns answer to it
     private suspend fun saveChangesHandling(): String {
         val login = binding.settingsUserLogin.text.toString()
         val name = binding.settingsUserName.text.toString()
@@ -158,6 +159,7 @@ class Settings : AppCompatActivity() {
         developersAlert.show()
     }
 
+    // forms intent for certain class and starts activity with it
     private fun startIntent(_class: Class<*>, user: User, extras: Map<String, String>?) {
         val intent = Intent(this, _class)
         binding.drawer.closeDrawer(GravityCompat.START)

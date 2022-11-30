@@ -36,7 +36,7 @@ class ChooseTask : Fragment() {
     private lateinit var fragBinding: FragmentChooseTaskBinding
     private val taskModel: TaskModel by activityViewModels()
     private val requests = HttpsRequests()
-    private val adapter = TaskAdapter {
+    private val adapter = TaskAdapter {  // onClick function for every adapter element
         val recycle = fragBinding.optionsRecycle
         taskModel.currentTask.value = taskModel.tasks.value!![recycle.getChildAdapterPosition(it)]
         taskModel.transitionName.value = it.transitionName
@@ -96,6 +96,7 @@ class ChooseTask : Fragment() {
         buttonConfigure()
     }
 
+    // button to add word in memorising activity
     private fun buttonConfigure() {
         if (taskModel.currentType.value!! == Constants.memorising) {
             val edit = EditText(context)
@@ -122,6 +123,7 @@ class ChooseTask : Fragment() {
         }
     }
 
+    // handling of adding a new memorising word
     private fun alertConfirmPressed(text: String) {
         if (text.isEmpty()) {
             Toast.makeText(context, "Слово не может быть пустым!", Toast.LENGTH_SHORT).show()
@@ -158,6 +160,7 @@ class ChooseTask : Fragment() {
         }
     }
 
+    // forms header to add new memorising task
     private suspend fun formHeader(description: String): TaskHeader {
         val translator = me.bush.translator.Translator()
 

@@ -29,6 +29,7 @@ class PasswordReset : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    // enables blocks after certain correct user input
     private fun enableBlocks(first: Boolean, second: Boolean) {
         binding.secretWordEditLayout.isEnabled = first
         binding.secretWordConfirmButton.isEnabled = first

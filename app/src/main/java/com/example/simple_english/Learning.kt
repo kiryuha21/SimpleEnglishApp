@@ -63,6 +63,7 @@ class Learning : AppCompatActivity() {
         }
     }
 
+    // Shows translator fragment
     private fun showTranslator() {
         supportFragmentManager
             .beginTransaction()
@@ -70,6 +71,7 @@ class Learning : AppCompatActivity() {
             .commit()
     }
 
+    // Shows statistics fragment
     private fun showStatistics() {
         supportFragmentManager
             .beginTransaction()
@@ -77,6 +79,7 @@ class Learning : AppCompatActivity() {
             .commit()
     }
 
+    // Gets tasks for livedata
     private fun setTasks(learningType: String) {
         binding.fragmentLoadingProgress.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
@@ -112,14 +115,17 @@ class Learning : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
+    // runs special request to get user-specified memorising
     private suspend fun loadMemorising() : String {
         return requests.sendAsyncRequest("/get_noticeable_headers", mapOf("id" to user.id.toString()), HttpMethods.POST)
     }
 
+    // gets all tasks by type
     private suspend fun loadFromDB(type: String): String {
         return requests.sendAsyncRequest("/find_task_headers_by_type", mapOf("type" to type), HttpMethods.POST)
     }
 
+    // sets text for navigation header
     private fun setNavHeaderText() {
         val navHeader = binding.navigation.commonNavigation.getHeaderView(0)
         val userGreetTV = navHeader.findViewById<TextView>(R.id.nav_header_greeting)
