@@ -12,7 +12,7 @@ import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 class HttpsRequests {
-    private val activeUrlBase = Constants.releaseURL
+    private val appBaseUrl = Constants.releaseURL
     private val musicBaseUrl = "https://cloud-api.yandex.net/v1/disk/public/resources/download?"
     private val client = OkHttpClient().newBuilder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -22,9 +22,9 @@ class HttpsRequests {
 
     private fun formRequest(option: String, data: FormBody, method: HttpMethods): Request =
         when (method) {
-            HttpMethods.POST -> Request.Builder().url(activeUrlBase + option).post(data).build()
-            HttpMethods.PUT -> Request.Builder().url(activeUrlBase + option).put(data).build()
-            HttpMethods.GET -> Request.Builder().url(activeUrlBase + option).get().build()
+            HttpMethods.POST -> Request.Builder().url(appBaseUrl + option).post(data).build()
+            HttpMethods.PUT -> Request.Builder().url(appBaseUrl + option).put(data).build()
+            HttpMethods.GET -> Request.Builder().url(appBaseUrl + option).get().build()
         }
 
     fun isNetworkAvailable(context: Context): Boolean {
@@ -77,7 +77,7 @@ class HttpsRequests {
 
     // sends async GET request to turn on server
     fun sendEmptyRequest() {
-        val request = Request.Builder().url(activeUrlBase).build()
+        val request = Request.Builder().url(appBaseUrl).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

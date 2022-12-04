@@ -28,7 +28,7 @@ class SignUp : AppCompatActivity() {
         userPassword.isEnabled = !isActive
         userPasswordRepeat.isEnabled = !isActive
         spinner.isEnabled = !isActive
-        signUpButton.isEnabled = !isActive
+        registerButton.isEnabled = !isActive
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

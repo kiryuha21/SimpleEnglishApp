@@ -151,6 +151,6 @@ class Statistics : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) = Statistics()
+        fun newInstance() = Statistics()
     }
 }
