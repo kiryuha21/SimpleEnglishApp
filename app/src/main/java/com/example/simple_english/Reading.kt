@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -83,7 +85,7 @@ class Reading : Fragment() {
         readingHeaderDescription.text = taskModel.currentTask.value!!.description
         readingHeaderCard.transitionName = taskModel.transitionName.value
 
-        fragBinding.textContent.text = taskModel.currentTask.value!!.content.taskText
+        fragBinding.textContent.text = HtmlCompat.fromHtml(taskModel.currentTask.value!!.content.taskText!!, FROM_HTML_MODE_COMPACT)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
