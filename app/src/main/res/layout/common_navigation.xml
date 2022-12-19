@@ -4,7 +4,7 @@
     android:layout_gravity="start"
     android:id="@+id/common_navigation"
     app:headerLayout="@layout/nav_header"
-    app:menu="@menu/main_menu_nav"
+    app:menu="@menu/menu_navigation"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
