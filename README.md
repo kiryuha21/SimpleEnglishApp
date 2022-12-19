@@ -8,18 +8,11 @@ __На данный момент разработан минимальный ф�
 
 ## Авторизация/регистрация/восстановление пароля
 
-<style>
-    img {
-        width: 200px;
-        height: 450px;
-    }
-</style>
-
 <table>
     <row>
-        <cell><img src="ReadMeImages/img.png"></cell>
-        <cell><img src="ReadMeImages/img_1.png"></cell>
-        <cell><img src="ReadMeImages/img_2.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_1.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_2.png"></cell>
     </row>
 </table>
 
@@ -27,8 +20,8 @@ __На данный момент разработан минимальный ф�
 
 <table>
     <row>
-        <cell><img src="ReadMeImages/img_3.png"></cell>
-        <cell><img src="ReadMeImages/img_4.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_3.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_4.png"></cell>
     </row>
 </table>
 
@@ -36,8 +29,8 @@ __На данный момент разработан минимальный ф�
 
 <table>
     <row>
-        <cell><img src="ReadMeImages/img_10.png"></cell>
-        <cell><img src="ReadMeImages/img_12.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_10.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_12.png"></cell>
     </row>
 </table>
 
@@ -45,9 +38,9 @@ __На данный момент разработан минимальный ф�
 
 <table>
     <row>
-        <cell><img src="ReadMeImages/img_11.png"></cell>
-        <cell><img src="ReadMeImages/img_13.png"></cell>
-        <cell><img src="ReadMeImages/img_14.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_11.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_13.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_14.png"></cell>
     </row>
 </table>
 
@@ -55,12 +48,12 @@ __На данный момент разработан минимальный ф�
 
 <table>
     <row>
-        <cell><img src="ReadMeImages/img_5.png"></cell>
-        <cell><img src="ReadMeImages/img_6.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_5.png"></cell>
+        <cell><img width="200px" height="450px" src="ReadMeImages/img_6.png"></cell>
     </row>
 </table>
 
 ## Настройки
 
-<img src="ReadMeImages/img_7.png">
+<img width="200px" height="450px" src="ReadMeImages/img_7.png">
 
